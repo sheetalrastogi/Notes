@@ -1,12 +1,14 @@
-Page Object Model (POM) in Selenium Java
+# Page Object Model (POM) in Selenium Java
 
-Page Object Model (POM) is a design pattern in Selenium where:
+**Page Object Model (POM)** is a design pattern in Selenium where:
 
-Each web page is represented by a separate Java class.
-Web elements and actions for that page are encapsulated within the page class.
-Test classes interact with page classes instead of directly interacting with Selenium APIs.
-Improves maintainability, reusability, and readability.
-Project Structure
+- Each web page is represented by a separate Java class.
+- Web elements and actions for that page are encapsulated within the page class.
+- Test classes interact with page classes instead of directly interacting with Selenium APIs.
+- Improves maintainability, reusability, and readability.
+
+**Project Structure**
+```text
 src/test/java
 │
 ├── pages
@@ -23,11 +25,12 @@ src/test/java
 │
 └── base
     └── BaseTest.java
+```
 
-1. Base Page Class
+# 1. Base Page Class
 
 Common methods used by all page classes.
-
+```java
 package pages;
 
 import org.openqa.selenium.WebDriver;
@@ -71,9 +74,10 @@ public class BasePage {
                 .getText();
     }
 }
-
-2. Login Page Class
+```
+# 2. Login Page Class
 Using PageFactory
+```java
 package pages;
 
 import org.openqa.selenium.WebDriver;
@@ -115,8 +119,9 @@ public class LoginPage extends BasePage {
         return new HomePage(driver);
     }
 }
-
-3. Home Page Class
+```
+# 3. Home Page Class
+```java
 package pages;
 
 import org.openqa.selenium.WebDriver;
@@ -138,8 +143,9 @@ public class HomePage extends BasePage {
         return getText(lblWelcome);
     }
 }
-
-4. Base Test Class
+```
+# 4. Base Test Class
+```java
 package base;
 
 import org.openqa.selenium.WebDriver;
@@ -170,8 +176,10 @@ public class BaseTest {
         }
     }
 }
+```
 
-5. Test Class
+# 5. Test Class
+```java
 package tests;
 
 import base.BaseTest;
@@ -197,11 +205,12 @@ public class LoginTest extends BaseTest {
                 .contains("Welcome"));
     }
 }
+```
 
-POM Without PageFactory (Recommended in Selenium 4)
+# POM Without PageFactory (Recommended in Selenium 4)
 
 Many modern frameworks avoid PageFactory and use By locators directly.
-
+```java
 LoginPage.java
 public class LoginPage {
 
@@ -238,29 +247,31 @@ public class LoginPage {
         return new HomePage(driver);
     }
 }
+```
 
-Fluent POM Design
+# Fluent POM Design
 
 A cleaner enterprise approach:
-
+```java
 new LoginPage(driver)
         .enterUserName("admin")
         .enterPassword("admin123")
         .clickLogin()
         .verifyUserLoggedIn();
+```
 
-POM with Component Objects
+# POM with Component Objects
 
 For reusable sections such as Header, Footer, Menu, Dashboard Widgets:
-
+```text
 HomePage
  ├── HeaderComponent
  ├── FooterComponent
  └── MenuComponent
-
+```
 
 Example:
-
+```java
 HomePage home = new HomePage(driver);
 
 home.getHeader()
@@ -268,8 +279,10 @@ home.getHeader()
 
 home.getMenu()
     .navigateToOrders();
+```
 
-Typical Enterprise Framework Structure
+# Typical Enterprise Framework Structure
+```text
 src/test/java
 │
 ├── base
@@ -298,8 +311,9 @@ src/test/java
 └── tests
     ├── LoginTests.java
     └── OrderTests.java
+```
 
-POM Best Practices
+# POM Best Practices
 
  ✅ One page = One class
  ✅ Hide locators inside page classes
@@ -312,6 +326,7 @@ POM Best Practices
  ✅ Use Component Objects for common page sections
 
 Example Usage
+```java
 LoginPage loginPage = new LoginPage(driver);
 
 HomePage homePage = loginPage
@@ -321,3 +336,4 @@ HomePage homePage = loginPage
 
 String message = homePage.getWelcomeMessage();
 
+```
