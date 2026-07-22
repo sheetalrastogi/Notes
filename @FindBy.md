@@ -399,3 +399,446 @@ Most modern Selenium frameworks prefer the cleaner syntax:
 ```
 
 while `How`-based declarations are primarily found in older or legacy automation frameworks.
+
+**Combining @FindBy**
+# Combining Multiple Locators in Appium for the Same Platform
+
+When an Appium application supports multiple versions, device variants, or UI implementations, a single locator may not always be sufficient.
+
+To combine multiple locators for the **same platform**, Appium provides:
+
+- `@AndroidFindAll` → **OR Logic** (find using any locator)
+- `@AndroidFindBys` → **AND Logic / Chained Lookup**
+- `@HowToUseLocators(androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE)` → **Recommended in Appium 8+**
+
+---
+
+# Option 1: Using `@AndroidFindAll` (OR Logic)
+
+Appium tries all locators and uses the first matching element.
+
+## Example
+
+```java
+@AndroidFindAll({
+    @AndroidBy(id = "username"),
+    @AndroidBy(xpath = "//android.widget.EditText")
+})
+@iOSXCUITFindBy(accessibility = "username")
+private WebElement txtUsername;
+```
+
+### Equivalent Logic
+
+```text
+id = username
+
+OR
+
+xpath = //android.widget.EditText
+```
+
+### Use Cases
+
+✅ App Version A uses:
+
+```text
+id = username
+```
+
+✅ App Version B uses different attributes
+
+✅ Need fallback locator strategy
+
+✅ Support multiple device variations
+
+---
+
+# Option 2: Using `@HowToUseLocators` (Recommended)
+
+This is the preferred approach in modern Appium frameworks.
+
+## Example
+
+```java
+@HowToUseLocators(
+    androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE
+)
+@AndroidFindBy(id = "username")
+@AndroidFindBy(xpath = "//android.widget.EditText")
+@iOSXCUITFindBy(accessibility = "username")
+private WebElement txtUsername;
+```
+
+---
+
+## How It Works
+
+Appium attempts:
+
+```text
+1. id = username
+
+2. xpath = //android.widget.EditText
+```
+
+and returns the first successful match.
+
+---
+
+## Benefits
+
+✅ Cleaner syntax
+
+✅ Easier maintenance
+
+✅ Better readability
+
+✅ Preferred for Appium 8+
+
+✅ Reduces the need for nested locator annotations
+
+---
+
+# Option 3: Using `@AndroidFindBys` (AND / Chained Lookup)
+
+Use this when one locator must be searched inside another locator.
+
+## Example
+
+```java
+@AndroidFindBys({
+    @AndroidBy(id = "loginForm"),
+    @AndroidBy(id = "username")
+})
+private WebElement txtUsername;
+```
+
+---
+
+## Equivalent Selenium Code
+
+```java
+driver.findElement(By.id("loginForm"))
+      .findElement(By.id("username"));
+```
+
+---
+
+## Search Flow
+
+```text
+loginForm
+   |
+   +--> username
+```
+
+---
+
+## Use Cases
+
+✅ Nested controls
+
+✅ Forms inside containers
+
+✅ Tables
+
+✅ Complex layouts
+
+✅ Parent-child relationships
+
+---
+
+# Cross-Platform Example
+
+A single page object can support Android and iOS while maintaining multiple Android locator options.
+
+```java
+@HowToUseLocators(
+    androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE
+)
+@AndroidFindBy(id = "username")
+@AndroidFindBy(accessibility = "usernameField")
+@AndroidFindBy(
+    xpath = "//android.widget.EditText[@content-desc='username']"
+)
+@iOSXCUITFindBy(accessibility = "username")
+private WebElement txtUsername;
+```
+
+---
+
+## Android Search Order
+
+Appium attempts:
+
+```text
+id = username
+
+OR
+
+accessibility = usernameField
+
+OR
+
+xpath = //android.widget.EditText[@content-desc='username']
+```
+
+---
+
+## iOS Search
+
+Only this locator is used:
+
+```text
+accessibility = username
+```
+
+---
+
+# Multiple Locators for Both Android and iOS
+
+Both platforms can have fallback locator chains.
+
+## Example
+
+```java
+@HowToUseLocators(
+    androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE,
+    iOSXCUITAutomation = LocatorGroupStrategy.ALL_POSSIBLE
+)
+@AndroidFindBy(id = "username")
+@AndroidFindBy(xpath = "//android.widget.EditText")
+
+@iOSXCUITFindBy(accessibility = "username")
+@iOSXCUITFindBy(xpath = "//XCUIElementTypeTextField")
+
+private WebElement txtUsername;
+```
+
+---
+
+# Android Search Order
+
+```text
+id = username
+
+OR
+
+xpath = //android.widget.EditText
+```
+
+---
+
+# iOS Search Order
+
+```text
+accessibility = username
+
+OR
+
+xpath = //XCUIElementTypeTextField
+```
+
+---
+
+# Enterprise Best Practice
+
+Prefer:
+
+```java
+@HowToUseLocators(
+    androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE
+)
+@AndroidFindBy(id = "username")
+@AndroidFindBy(accessibility = "usernameField")
+private WebElement txtUsername;
+```
+
+instead of relying heavily on XPath fallbacks.
+
+---
+
+# Recommended Locator Priority
+
+## Android
+
+```text
+AccessibilityId
+        ↓
+Id
+        ↓
+UIAutomator
+        ↓
+Class Name
+        ↓
+XPath
+```
+
+---
+
+## iOS
+
+```text
+AccessibilityId
+        ↓
+Id / Name
+        ↓
+iOS Class Chain
+        ↓
+iOS Predicate String
+        ↓
+XPath
+```
+
+---
+
+# Why Avoid Excessive XPath Usage?
+
+### Accessibility ID
+
+✅ Fastest
+
+✅ Stable
+
+✅ Cross-platform
+
+```java
+@AndroidFindBy(accessibility = "username")
+```
+
+---
+
+### ID
+
+✅ Fast
+
+✅ Readable
+
+✅ Less brittle
+
+```java
+@AndroidFindBy(id = "username")
+```
+
+---
+
+### XPath
+
+❌ Slower
+
+❌ More brittle
+
+❌ Sensitive to UI hierarchy changes
+
+```java
+@AndroidFindBy(
+    xpath = "//android.widget.EditText[@content-desc='username']"
+)
+```
+
+---
+
+# Comparison of Locator Grouping Approaches
+
+## OR Logic
+
+```java
+@AndroidFindAll({
+    @AndroidBy(id = "username"),
+    @AndroidBy(xpath = "//android.widget.EditText")
+})
+```
+
+Behavior:
+
+```text
+Find element using ANY matching locator.
+```
+
+---
+
+## ALL_POSSIBLE Strategy
+
+```java
+@HowToUseLocators(
+    androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE
+)
+```
+
+Behavior:
+
+```text
+Try all defined locators until one succeeds.
+```
+
+---
+
+## AND / Chained Logic
+
+```java
+@AndroidFindBys({
+    @AndroidBy(id = "form"),
+    @AndroidBy(id = "username")
+})
+```
+
+Behavior:
+
+```text
+Find username inside form.
+```
+
+---
+
+# Interview Points
+
+### What is the difference between `@AndroidFindAll` and `@AndroidFindBys`?
+
+**`@AndroidFindAll`**
+
+```text
+OR Logic
+```
+
+Any locator can match.
+
+---
+
+**`@AndroidFindBys`**
+
+```text
+AND / Chained Logic
+```
+
+Each locator is applied sequentially.
+
+---
+
+### What is the preferred approach in Appium 8+?
+
+```java
+@HowToUseLocators(
+    androidAutomation = LocatorGroupStrategy.ALL_POSSIBLE
+)
+```
+
+because it provides cleaner and more maintainable code.
+
+---
+
+### What locator strategy should be prioritized?
+
+```text
+AccessibilityId
+↓
+Id
+↓
+Class Chain (iOS)
+↓
+UIAutomator (Android)
+↓
+XPath
+```
+
+The most common enterprise Appium frameworks use **`@HowToUseLocators` with `ALL_POSSIBLE`** along with **Accessibility ID and ID-based locators** to create robust, maintainable, and high-performing cross-platform mobile automation frameworks.
