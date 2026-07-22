@@ -314,7 +314,7 @@ src/test/java
 ```
 
 # POM Best Practices
-
+```text
  ✅ One page = One class
  ✅ Hide locators inside page classes
  ✅ Keep assertions in test classes (or dedicated assertion classes)
@@ -324,7 +324,7 @@ src/test/java
  ✅ Separate Page Objects from Test Data
  ✅ Prefer By locators over PageFactory for Selenium 4 projects
  ✅ Use Component Objects for common page sections
-
+```
 Example Usage
 ```java
 LoginPage loginPage = new LoginPage(driver);
