@@ -322,3 +322,354 @@ jsUtil.click(loginButton);
 jsUtil.setValue(username, "admin");
 jsUtil.scrollIntoView(submitButton);
 ```
+
+
+# Using JavascriptExecutor with Different Locator Strategies in Selenium Java
+
+## Setup
+
+```java
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrom*.ChromeDriver;
+
+WebDriver driver =*new ChromeDriver();
+
+JavascriptExe*utor js = (JavascriptExecutor) dri*er;
+```
+
+---
+
+# 1.*Using ID Locator
+
+```java
+WebEleme*t username = driver.findElement(By*id("username"));
+
+js.executeScript*
+    "arguments[0].value='admin';"*
+    username
+);
+
+*s.executeScript(
+    "arguments[0]*click();",
+    username
+);
+```
+
+--*
+
+# 2. Using*Name Locator
+
+```java
+WebElement e*ail = driver.findElement(By.name("*mail"));
+
+js.executeScript(
+    "a*guments[0].value='user@test.com';"*
+    email
+);
+```
+
+---
+
+# 3. Using*ClassName Locator
+
+```java
+WebElem*nt searchBox = driver.findElement(*    By.className("search-input*)
+);
+
+js.executeScript(
+    "argum*nts[0].value='Laptop';",
+    searc*Box*);
+```
+
+---
+
+# 4. Using TagName Lo*ator
+
+Example* Fetch first `<h1>` element.
+
+```*ava*WebElement header = driver.findEle*ent(
+    By.tagName("h1")
+);
+
+Stri*g text = (String) js.executeScript*
+    "return arguments[0].textCont*nt;",
+    header
+);
+
+System.out.pr*ntln(text);
+```
+
+---
+
+# 5. Using L*nkText Locator
+
+```java
+WebElement*homeLink =*driver.findElement(
+    By.linkTex*("Home")
+);
+
+js.executeScript(
+   *"arguments[0].click();",
+    homeL*nk
+);
+```
+
+---
+
+# 6. Using Partial*inkText Locator
+
+```*ava
+WebElement profileLink = drive*.findElement(
+    By.partialLinkTe*t("Profile")
+);
+
+js.executeScript(*    "arguments[0].click();",
+    p*ofileLink
+);
+```
+
+---
+
+# 7.*Using CSS Locator
+
+```java
+WebElem*nt submitBtn = driver.find*lement(
+    By.cssSelector("button*submit-btn")
+);
+
+js.executeScript(*    "arguments[0].click();",
+    s*bmitBtn
+);
+```
+
+---
+
+# 8. Using XP*th*Locator*
+```java
+WebElement password = dri*er.findElement(
+*   By.xpath("//input[@type='password']")
+);
+
+js.executeScript(
+    "a*guments[0].value='Welcome123';",
+ *  password
+);
+```
+
+---
+
+# 9. Using*Element Text
+
+Assume HTML:
+
+```htm*
+<button>Login</button>
+```
+
+*ocate*by text using XPath and click using JavaScript.
+
+```java
+WebElement loginBtn = driver.findElement(
+    By.xpath("//*[text()='Login']")
+);
+
+js.executeScript(
+    "arguments[0].click();",
+    loginBtn
+);
+```
+
+---
+
+# Scroll Element into View
+
+Works with any locator strategy.
+
+```java
+WebElement element = driver.findElement(
+    By.id("submitBtn")
+);
+
+js.executeScript(
+    "arguments[0].scrollIntoView(true);",
+    element
+);
+```
+
+---
+
+# Highlight an Element
+
+```java
+WebElement element = driver.findElement(
+    By.cssSelector(".menu")
+);
+
+js.executeScript(
+    "arguments[0].style.border='3px solid red';",
+    element
+);
+```
+
+---
+
+# Read Text from Element
+
+```java
+WebElement label = driver.findElement(
+    By.className("welcome-msg")
+);
+
+String text = (String) js.executeScript(
+    "return arguments[0].textContent;",
+    label
+);
+
+System.out.println(text);
+```
+
+---
+
+# Read Attribute Value
+
+```java
+WebElement textbox = driver.findElement(
+    By.id("username")
+);
+
+String value = (String) js.executeScript(
+    "return arguments[0].getAttribute('value');",
+    textbox
+);
+
+System.out.println(value);
+```
+
+---
+
+# Interacting Directly with DOM Using JavaScript (Without WebElement)
+
+## By ID
+
+```java
+String value = (String) js.executeScript(
+    "return document.getElementById('username').value;"
+);
+```
+
+---
+
+## By Name
+
+```java
+String value = (String) js.executeScript(
+    "return document.getElementsByName('email')[0].value;"
+);
+```
+
+---
+
+## By ClassName
+
+```java
+String text = (String) js.executeScript(
+    "return document.getElementsByClassName('welcome-msg')[0].textContent;"
+);
+```
+
+---
+
+## By TagName
+
+```java
+String text = (String) js.executeScript(
+    "return document.getElementsByTagName('h1')[0].textContent;"
+);
+```
+
+---
+
+## By CSS Selector
+
+```java
+String text = (String) js.executeScript(
+    "return document.querySelector('.welcome-msg').textContent;"
+);
+```
+
+---
+
+## By XPath
+
+```java
+String text = (String) js.executeScript(
+    "return document.evaluate(\"//span[@id='message']\", document, null,"
+    + "XPathResult.FIRST_ORDERED_NODE_TYPE, null)"
+    + ".singleNodeValue.textContent;"
+);
+```
+
+---
+
+# Generic Utility Method
+
+```java
+public class JavaScriptUtils {
+
+    private final JavascriptExecutor js;
+
+    public JavaScriptUtils(WebDriver driver) {
+        this.js = (JavascriptExecutor) driver;
+    }
+
+    public void click(WebElement element) {
+        js.executeScript(
+            "arguments[0].click();",
+            element
+        );
+    }
+
+    public void enterText(WebElement element, String value) {
+        js.executeScript(
+            "arguments[0].value=arguments[1];",
+            element,
+            value
+        );
+    }
+
+    public String getText(WebElement element) {
+        return (String) js.executeScript(
+            "return arguments[0].textContent;",
+            element
+        );
+    }
+
+    public void scrollIntoView(WebElement element) {
+        js.executeScript(
+            "arguments[0].scrollIntoView(true);",
+            element
+        );
+    }
+
+    public void highlight(WebElement element) {
+        js.executeScript(
+            "arguments[0].style.border='3px solid red';",
+            element
+        );
+    }
+}
+```
+
+# Example Usage
+
+```java
+JavaScriptUtils jsUtil = new JavaScriptUtils(driver);
+
+WebElement username = driver.findElement(By.id("username"));
+WebElement loginBtn = driver.findElement(By.linkText("Login"));
+
+jsUtil.enterText(username, "admin");
+jsUtil.highlight(username);
+jsUtil.scrollIntoView(loginBtn);
+jsUtil.click(loginBtn);
+```
