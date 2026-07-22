@@ -7,6 +7,7 @@ Each API resource/service is represented by a separate class.
 Request creation, endpoint URLs, headers, authentication, and API actions are encapsulated inside service classes.
 
 # Recommended Framework Structure
+```text
 src/test/java
 │
 ├── api
@@ -37,6 +38,7 @@ src/test/java
 │
 └── base
      └── BaseTest.java
+```
 
 # 1. Endpoint Constants
 EndPoints.java
@@ -69,7 +71,7 @@ public class RequestSpecs {
 }
 ```
 
-3. Response Specification
+# 3. Response Specification
 ResponseSpecs.java
 ```java
 import io.restassured.builder.ResponseSpecBuilder;
@@ -86,7 +88,7 @@ public class ResponseSpecs {
 }
 ```
 
-4. API Object Class (Equivalent of Page Class)
+# 4. API Object Class (Equivalent of Page Class)
 UserAPI.java
 ```java
 import io.restassured.response.Response;
@@ -122,7 +124,7 @@ public class UserAPI {
 }
 ```
 
-5. POJO Model Class
+# 5. POJO Model Class
 User.java
 
 ```java
@@ -156,7 +158,7 @@ public class User {
 }
 ```
 
-6. Base Test
+# 6. Base Test
 BaseTest.java
 ```java
 import io.restassured.RestAssured;
@@ -172,7 +174,7 @@ public class BaseTest {
 }
 ```
 
-7. Test Class
+# 7. Test Class
 UserTests.java
 ```java
 import org.testng.Assert;
@@ -207,7 +209,7 @@ public class UserTests extends BaseTest {
 }
 ```
 
-Advanced API Object Model with Builder Pattern
+# Advanced API Object Model with Builder Pattern
 
 For enterprise frameworks, use:
 ```java
@@ -219,7 +221,7 @@ Response response = userAPI
                         .getUser(10);
 ```
 
-Example:
+Example usage:
 ```java
 public class UserAPI {
 
@@ -256,7 +258,7 @@ public class UserAPI {
 }
 ```
 
-Comparing Selenium POM vs RestAssured API Object Model
+# Comparing Selenium POM vs RestAssured API Object Model
 Selenium POM
 ```java
 LoginPage loginPage = new LoginPage(driver);
