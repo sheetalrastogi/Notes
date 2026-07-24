@@ -34,8 +34,7 @@ Automation Framework
 ### Formula
 
 ```text
-Suite Execution Time =
-Suite End Time - Suite Start Time
+Suite Execution Time = Suite End Time - Suite Start Time
 ```
 
 ### Capture Using TestNG
@@ -133,14 +132,10 @@ Total Tests = 500
 
 Total Execution Time = 18000 sec
 
-Average Test Time
-
-=18000 / 500
-
-=36 sec
+Average Test Time    = 18000 / 500
+                     =36 sec
 ```
 
----
 
 # 3. Test Execution Velocity (Throughput)
 
@@ -149,15 +144,9 @@ Throughput measures how many test cases complete in a unit of time.
 ### Formula
 
 ```text
-Throughput
 
-=
+Throughput =  Total Tests Executed  /  Total Execution Time
 
-Total Tests Executed
-
-/
-
-Total Execution Time
 ```
 
 Example
@@ -167,23 +156,14 @@ Example
 
 400 Minutes
 
-Throughput
+Throughput = 2 Tests/Minute
 
-=
-
-2 Tests/Minute
 ```
 
 Implementation
 
 ```java
-double throughput =
-
-(double) totalTests
-
-/
-
-(totalExecutionTime / 60000.0);
+double throughput = (double) totalTests / (totalExecutionTime / 60000.0);
 
 Logger.info("Throughput : "
         + throughput
@@ -193,8 +173,7 @@ Logger.info("Throughput : "
 Example Output
 
 ```text
-Throughput
-
+Throughput 
 2.8 Tests/Minute
 ```
 
@@ -205,40 +184,25 @@ Throughput
 You listed "Test Execution Velocity (Throughput)" twice. A complementary metric is throughput per hour.
 
 ```text
-Velocity =
+Velocity = Executed Tests / Execution Hours
 
-Executed Tests
-
-/
-
-Execution Hours
 ```
 
 Example
 
 ```text
-1000 Tests
+1000 Tests  5 Hours
 
-5 Hours
-
-Velocity
-
-=
-
-200 Tests/Hour
+Velocity = 200 Tests/Hour
 ```
 
 Implementation
 
 ```java
-double velocity =
+double velocity =  totalTests / (totalExecutionTime / 3600000.0);
 
-totalTests /
-
-(totalExecutionTime / 3600000.0);
 ```
 
----
 
 # Additional Metrics Worth Capturing
 
@@ -267,39 +231,23 @@ Automation Metrics Dashboard
 =============================================
 
 Total Suites               : 5
-
 Total Test Cases           : 825
-
 Passed                     : 801
-
 Failed                     : 19
-
 Skipped                    : 5
-
 Pass Rate                  : 97.1 %
-
 Suite Execution Time       : 2h 34m
-
 Average Test Duration      : 11.2 sec
-
 Fastest Test               : 0.8 sec
-
 Slowest Test               : 94 sec
-
 Throughput                 : 321 Tests/Hour
-
 Parallel Threads           : 8
-
 CPU Utilization            : 71 %
-
 Memory Peak                : 2.1 GB
-
 Retries                    : 6
-
 =============================================
 ```
 
----
 
 # Export Metrics to CSV
 
