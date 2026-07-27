@@ -451,6 +451,334 @@ Sample Output
 - Reason: net::ERR_BLOCKED_BY_CLIENT
 
 
+## Network throttling features with CDP
+--------------------------------------------
+
+## Network throttling:
+--------------------------
+
+The highest-value network throttling scenarios are:
+
+- Loading Spinner Validation
+- API Timeout Handling
+- Retry Mechanism Testing
+- Duplicate Transaction Prevention
+- Slow Mobile Network Simulation
+- Performance SLA Validation
+- Large File Download Testing
+- Distributed Microservice Latency Testing
+- Progress Indicator Validation
+- Customer Experience Testing Under Poor Connectivity
+
+
+
+## Example 1: Simulate Slow 3G Network
+
+
+```java
+import java.util.Optional;
+
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.v138.network.Network;
+
+ChromeDriver driver = new ChromeDriver();
+
+DevTools devTools = driver.getDevTools();
+devTools.createSession();
+
+devTools.send(Network.enable(
+        Optional.empty(),
+        Optional.empty(),
+        Optional.empty()));
+
+// Simulate Slow 3G
+devTools.send(
+        Network.emulateNetworkConditions(
+                false,      // offline
+                100,        // latency (ms)
+                50000,      // download speed
+                20000,      // upload speed
+                Optional.empty()));
+
+driver.get("https://example.com");
+```
+
+## Use Case 1: Verify Loading Spinner
+
+**Scenario**
+```text
+User clicks Search Policy
+       ↓
+API takes longer than normal
+       ↓
+Loading Spinner displayed
+       ↓
+Response received
+       ↓
+Policy details displayed
+```
+
+```java
+// Enable slow network
+devTools.send(
+        Network.emulateNetworkConditions(
+                false,
+                3000,
+                50000,
+                20000,
+                Optional.empty()));
+
+// Perform search
+driver.findElement(By.id("policyNumber"))
+      .sendKeys("P12345");
+
+driver.findElement(By.id("searchBtn"))
+      .click();
+
+// Verify spinner visible
+Assert.assertTrue(
+    driver.findElement(By.id("loadingSpinner"))
+          .isDisplayed());
+```
+- Spinner appears
+- UI does not freeze
+- User gets feedback
+
+
+## Use Case 2: Verify API Timeout Handling
+
+```text
+Scenario
+Search Customer
+      ↓
+Backend API is very slow
+      ↓
+Request exceeds timeout
+      ↓
+Error message displayed
+
+Test Flow
+```
+```java
+devTools.send(
+        Network.emulateNetworkConditions(
+                false,
+                10000,
+                1000,
+                1000,
+                Optional.empty()));
+
+driver.findElement(By.id("searchBtn"))
+      .click();
+```
+
+Verify
+```java
+
+String error = driver.findElement(By.id("errorMsg")).getText();
+
+Assert.assertEquals(error, "Request timed out. Please try again.");
+
+```
+
+
+## Use Case 3: Validate Retry Logic
+
+```text
+Scenario
+Submit Claim
+      ↓
+Slow Network
+      ↓
+First Call Fails
+      ↓
+Automatic Retry
+      ↓
+Success
+
+Example Validation
+```
+
+```java
+devTools.send(
+        Network.emulateNetworkConditions(
+                false,
+                5000,
+                5000,
+                5000,
+                Optional.empty()));
+
+driver.findElement(By.id("submitBtn"))
+      .click();
+
+```
+
+Verify:
+
+- Retry attempted
+- User notification shown
+- Request eventually succeeds
+
+
+
+## Use Case 4: Performance Testing - Measure page load under slow networks.
+
+```java
+long startTime =
+        System.currentTimeMillis();
+
+driver.get("https://example.com");
+
+long endTime =
+        System.currentTimeMillis();
+
+System.out.println(
+        "Page Load Time: "
+                + (endTime - startTime));
+```
+Compare Results
+- Normal Network  : 2 Seconds
+- 3G Network      : 8 Seconds
+- 2G Network      : 20 Seconds
+
+Useful for SLA validation.
+
+
+
+## Use Case 5: Mobile User Simulation
+
+Simulate mobile internet speeds.
+
+devTools.send(
+        Network.emulateNetworkConditions(
+                false,
+                400,
+                1600000,
+                750000,
+                Optional.empty()));
+
+Validate
+- Responsive design
+- Lazy loading
+- Image loading
+- Mobile user experience
+
+
+## Use Case 6: Verify Report Download Progress
+```text
+Scenario
+User downloads PDF report
+      ↓
+Slow Network
+      ↓
+Progress Indicator Appears
+      ↓
+File Download Completes
+
+Validation
+```
+```java
+Assert.assertTrue(
+        driver.findElement(By.id("downloadProgress"))
+              .isDisplayed());
+```
+
+
+## Use Case 7: Validate Search Auto-Suggestions
+
+```text
+Scenario
+User types customer name
+      ↓
+Autocomplete API called
+      ↓
+Network slow
+      ↓
+Suggestions still appear correctly
+
+Verify
+```
+```java
+driver.findElement(By.id("customer"))
+      .sendKeys("John");
+
+List<WebElement> suggestions =
+        driver.findElements(
+                By.className("suggestion"));
+```
+
+```text
+Enterprise QA Use Cases
+Banking
+Fund Transfer
+      ↓
+Slow Network
+      ↓
+Verify transaction not duplicated
+
+Insurance
+Claim Submission
+      ↓
+High Latency
+      ↓
+Verify claim submitted once
+
+Healthcare
+Patient Search
+      ↓
+Slow API response
+      ↓
+Verify timeout handling
+
+E-Commerce
+Add To Cart
+      ↓
+Network delay
+      ↓
+Verify no duplicate orders
+
+```
+
+## Reusable Utility
+```java
+public class NetworkThrottleUtil {
+
+    public static void simulateSlow3G(
+            ChromeDriver driver) {
+
+        DevTools devTools =
+                driver.getDevTools();
+
+        devTools.createSession();
+
+        devTools.send(Network.enable(
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty()));
+
+        devTools.send(
+                Network.emulateNetworkConditions(
+                        false,
+                        200,
+                        50000,
+                        20000,
+                        Optional.empty()));
+    }
+}
+
+// Usage
+
+ChromeDriver driver = new ChromeDriver();
+
+NetworkThrottleUtil.simulateSlow3G(driver);
+
+driver.get("https://example.com");
+
+```
+
+
+
 
  
 
