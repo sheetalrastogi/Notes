@@ -2459,7 +2459,17 @@ driver.get("https://myapp.com");
 - Monitor Browser Events +  Monitor API Calls  + Monitor Performance Metrics  + Monitor Console Errors
 
 
-
+Areas to add:
+1. Modify User agent
+2. Enable Offline mode
+3. Download file handling
+4. Inject HTTP Headers
+5. Basic authentication without Pop-up
+6. Simulate CPU / Network throttling
+7. Security Certificate validations
+8. Take full page screenshot
+9. Browser Cache Management
+10. Browser Cookie Management
 
 
 
