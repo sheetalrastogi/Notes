@@ -1547,6 +1547,410 @@ driver.get("https://myapp.com");
 
 
 
+## Chrome Dev Protocol - usage for capturing Performance Metrics
+-------------------------------------------------------------------
+
+
+Performance metrics collected through Chrome DevTools Protocol (CDP) provide browser-level insights that are not available through traditional Selenium WebDriver APIs.
+
+These metrics help measure:
+
+- Page performance
+- Browser resource consumption
+- JavaScript execution efficiency
+- Memory usage
+- DOM complexity
+- Rendering performance
+- Frontend bottlenecks
+
+
+
+## Example 1: Capture All Browser Performance Metrics
+
+```java
+
+import java.util.List;
+
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.v138.performance.Performance;
+import org.openqa.selenium.devtools.v138.performance.model.Metric;
+
+ChromeDriver driver = new ChromeDriver();
+
+DevTools devTools = driver.getDevTools();
+
+devTools.createSession();
+
+// Enable Performance Domain
+devTools.send(Performance.enable());
+
+driver.get("https://www.google.com");
+
+// Get Metrics
+List<Metric> metrics =
+        devTools.send(
+                Performance.getMetrics());
+
+for(Metric metric : metrics)
+{
+    System.out.println(
+            metric.getName()
+            + " = "
+            + metric.getValue());
+}
+```
+
+
+Sample output:
+
+```text
+Timestamp = 12345678
+
+Documents = 1
+
+Frames = 1
+
+JSEventListeners = 22
+
+Nodes = 520
+
+LayoutCount = 12
+
+RecalcStyleCount = 18
+
+JSHeapUsedSize = 3500000
+
+JSHeapTotalSize = 5500000
+
+TaskDuration = 2.45
+
+```
+
+## Example 2: Monitor Page Load Performance
+
+
+```java
+devTools.send(Performance.enable());
+
+driver.get("https://example.com");
+
+List<Metric> metrics =
+        devTools.send(
+                Performance.getMetrics());
+
+for(Metric metric : metrics)
+{
+    if(metric.getName()
+            .equals("TaskDuration"))
+    {
+        System.out.println(
+                "Page Load Duration: "
+                + metric.getValue());
+    }
+}
+```
+
+
+## Example 3: Capture JavaScript Heap Memory Usage
+
+```java
+
+List<Metric> metrics =
+        devTools.send(
+                Performance.getMetrics());
+
+for(Metric metric : metrics)
+{
+    if(metric.getName()
+            .equals("JSHeapUsedSize"))
+    {
+        System.out.println(
+                "Heap Used: "
+                + metric.getValue());
+    }
+
+    if(metric.getName()
+            .equals("JSHeapTotalSize"))
+    {
+        System.out.println(
+                "Heap Total: "
+                + metric.getValue());
+    }
+}
+
+```
+
+Sample output:
+
+```text
+
+Heap Used  : 4.2 MB
+
+Heap Total : 8.5 MB
+
+```
+
+
+## Example 4: Detect Memory Leaks
+
+Capture memory before and after repeated actions.
+
+```java
+
+double initialHeap = 0;
+double finalHeap = 0;
+
+List<Metric> initialMetrics =
+        devTools.send(
+                Performance.getMetrics());
+
+for(Metric metric : initialMetrics)
+{
+    if(metric.getName()
+            .equals("JSHeapUsedSize"))
+    {
+        initialHeap = metric.getValue();
+    }
+}
+
+// Perform repeated actions
+
+for(int i=0;i<50;i++)
+{
+    driver.navigate().refresh();
+}
+
+List<Metric> finalMetrics =
+        devTools.send(
+                Performance.getMetrics());
+
+for(Metric metric : finalMetrics)
+{
+    if(metric.getName()
+            .equals("JSHeapUsedSize"))
+    {
+        finalHeap = metric.getValue();
+    }
+}
+
+System.out.println(
+        "Heap Growth = "
+        + (finalHeap-initialHeap));
+
+```
+
+
+## Example 5: Capture DOM Node Count
+
+Useful for detecting excessive DOM growth.
+
+
+```java
+
+List<Metric> metrics =
+        devTools.send(
+                Performance.getMetrics());
+
+for(Metric metric : metrics)
+{
+    if(metric.getName().equals("Nodes"))
+    {
+        System.out.println(
+                "DOM Nodes = "
+                + metric.getValue());
+    }
+}
+
+```
+
+Sample output:  DOM Nodes = 1560
+
+
+## Example 6: Monitor Layout Recalculations
+
+Excessive layout calculations can indicate rendering inefficiencies.
+
+```java
+
+List<Metric> metrics =
+        devTools.send(
+                Performance.getMetrics());
+
+for(Metric metric : metrics)
+{
+    if(metric.getName()
+             .equals("LayoutCount"))
+    {
+        System.out.println(
+                "Layout Count = "
+                + metric.getValue());
+    }
+
+    if(metric.getName()
+             .equals("RecalcStyleCount"))
+    {
+        System.out.println(
+                "Style Recalculation Count = "
+                + metric.getValue());
+    }
+}
+
+```
+
+Sample output:
+
+```text
+
+Layout Count = 15
+
+Style Recalculation Count = 20
+
+```
+
+
+## Example 7: Compare Performance Before and After User Action
+
+Scenario:
+```text
+
+Search Policy
+      ↓
+Measure Browser Metrics
+
+```
+
+```java
+
+List<Metric> beforeMetrics =
+        devTools.send(
+                Performance.getMetrics());
+
+driver.findElement(By.id("searchBtn"))
+      .click();
+
+List<Metric> afterMetrics =
+        devTools.send(
+                Performance.getMetrics());
+
+```
+
+Compare:
+
+- DOM Growth
+- Heap Growth
+- Layout Count Increase
+- Task Duration Increase
+
+
+## Example 8: Capture Metrics During Login
+
+```java
+
+devTools.send(Performance.enable());
+
+driver.get("https://myapp.com");
+
+driver.findElement(By.id("user"))
+      .sendKeys("admin");
+
+driver.findElement(By.id("password"))
+      .sendKeys("password");
+
+driver.findElement(By.id("loginBtn"))
+      .click();
+
+List<Metric> metrics =
+        devTools.send(
+                Performance.getMetrics());
+
+metrics.forEach(System.out::println);
+
+```
+
+
+##  Reusable Performance Utility
+----------------------------------
+
+
+```java
+
+public class PerformanceUtil {
+
+    public static List<Metric> getMetrics(
+            ChromeDriver driver) {
+
+        DevTools devTools =
+                driver.getDevTools();
+
+        devTools.createSession();
+
+        devTools.send(
+                Performance.enable());
+
+        return devTools.send(
+                Performance.getMetrics());
+    }
+}
+
+```
+
+Usage:
+
+```java
+
+List<Metric> metrics =
+        PerformanceUtil.getMetrics(driver);
+
+metrics.forEach(System.out::println);
+
+```
+
+
+## Example 10: Performance KPI Validation
+
+Validate the application against performance SLAs.
+
+
+```java
+
+double heapSize = 0;
+
+for(Metric metric : metrics)
+{
+    if(metric.getName()
+            .equals("JSHeapUsedSize"))
+    {
+        heapSize = metric.getValue();
+    }
+}
+
+Assert.assertTrue(
+        heapSize < 10000000,
+        "Heap Usage exceeded threshold");
+
+```
+
+**Common CDP Performance Metrics**
+
+Metric	DescriptionTimestamp	Metric collection timestamp
+Documents	Number of loaded documents
+Frames	Active browser frames
+Nodes	Total DOM nodes
+LayoutCount	Number of layout calculations
+RecalcStyleCount	CSS recalculations
+JSEventListeners	Registered JS listeners
+JSHeapUsedSize	Actual memory consumed
+JSHeapTotalSize	Total allocated JS heap
+ScriptDuration	JavaScript execution time
+TaskDuration	Browser task execution time
+LayoutDuration	Time spent rendering layout
+RecalcStyleDuration	CSS recalculation time
+
+
+
+
+
 
 
 
