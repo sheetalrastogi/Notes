@@ -1949,6 +1949,517 @@ RecalcStyleDuration	CSS recalculation time
 
 
 
+## Browser Events with Chrome Dev Protocol:
+--------------------------------------------------
+
+## Capture Browser Events Using Chrome DevTools Protocol
+------------------------------------------------------------
+
+
+Chrome DevTools Protocol (CDP) allows Selenium 4 to listen to browser-level events that occur during page navigation, network communication, DOM processing, and user interactions.
+
+This is useful for:
+
+- Page load monitoring
+- API tracking
+- Performance analysis
+- Synchronization debugging
+- Defect troubleshooting
+- Browser activity auditing
+
+
+## 1. Capture Page Navigation Events
+
+Scenario:  Monitor when pages start and finish loading.
+
+```java
+
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.v138.page.Page;
+
+ChromeDriver driver = new ChromeDriver();
+
+DevTools devTools = driver.getDevTools();
+devTools.createSession();
+
+devTools.send(Page.enable());
+
+devTools.addListener(
+        Page.frameNavigated(),
+        frame -> {
+
+            System.out.println(
+                    "Navigated To: "
+                    + frame.getFrame().getUrl());
+        });
+
+driver.get("https://www.google.com");
+
+```
+
+Output:
+
+```text
+
+Navigated To:
+https://www.google.com
+
+```
+
+
+## 2. Capture Page Load Event
+Detect when page loading is completed
+
+```java
+
+devTools.send(Page.enable());
+
+devTools.addListener(
+        Page.loadEventFired(),
+        event -> {
+
+            System.out.println(
+                    "Page Fully Loaded");
+        });
+
+driver.get("https://example.com");
+
+```
+
+output:  Page Fully Loaded
+
+
+## 3. Capture DOM Content Loaded Event
+
+This event occurs before the full page is loaded.
+
+```java
+
+devTools.send(Page.enable());
+
+devTools.addListener(
+        Page.domContentEventFired(),
+        event -> {
+
+            System.out.println(
+                    "DOM Ready Event Triggered");
+        });
+
+```
+
+Usage:
+
+- Measure DOM Ready Time
+- Debug page synchronization issues
+- Validate SPA loading
+
+
+## 4. Capture Network Request Events
+
+Monitor all outgoing browser requests.
+
+```java
+
+import java.util.Optional;
+import org.openqa.selenium.devtools.v138.network.Network;
+
+devTools.send(
+        Network.enable(
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty()));
+
+devTools.addListener(
+        Network.requestWillBeSent(),
+        request -> {
+
+            System.out.println(
+                    "Request URL : "
+                    + request.getRequest().getUrl());
+
+            System.out.println(
+                    "Method : "
+                    + request.getRequest().getMethod());
+        });
+
+```
+
+Output:
+
+```text
+
+Request URL :
+https://api.company.com/customer
+
+Method :
+GET
+
+```
+
+
+## 5. Capture Network Response Events
+
+
+```java
+
+devTools.addListener(
+        Network.responseReceived(),
+        response -> {
+
+            System.out.println(
+                    "Response URL : "
+                    + response.getResponse().getUrl());
+
+            System.out.println(
+                    "Status Code : "
+                    + response.getResponse().getStatus());
+        });
+
+```
+
+Output:
+
+```text
+
+Response URL :
+https://api.company.com/customer
+
+Status Code :
+200
+
+```
+
+## 6. Capture Request Failure Events
+
+Useful for troubleshooting failing APIs.
+
+
+```java
+
+devTools.addListener(
+        Network.loadingFailed(),
+        failure -> {
+
+            System.out.println(
+                    "Request Failed");
+
+            System.out.println(
+                    failure.getErrorText());
+        });
+
+```
+
+Sample output:
+
+```text
+
+Request Failed
+
+net::ERR_CONNECTION_REFUSED
+```
+
+
+## 7. Capture File Download Events
+
+Monitor file download initiation.
+
+
+```java 
+
+devTools.addListener(
+        Page.downloadWillBegin(),
+        download -> {
+
+            System.out.println(
+                    "Download Started");
+
+            System.out.println(
+                    download.getUrl());
+        });
+
+```
+
+Use Cases:
+```text
+
+PDF Downloads
+Excel Downloads
+Report Exports
+```
+
+
+## 8. Capture Browser Console Events
+
+Monitor browser console messages.
+
+```java
+
+import org.openqa.selenium.devtools.v138.log.Log;
+
+devTools.send(Log.enable());
+
+devTools.addListener(
+        Log.entryAdded(),
+        log -> {
+
+            System.out.println(
+                    log.getLevel()
+                    + " : "
+                    + log.getText());
+        });
+
+```
+
+Output:
+
+```text
+
+INFO : Application Loaded
+
+WARNING : Deprecated API
+
+ERROR : Uncaught TypeError
+
+```
+
+
+## 9. Capture JavaScript Exception Events
+
+Capture client-side runtime errors.
+
+```java
+
+import org.openqa.selenium.devtools.v138.runtime.Runtime;
+
+devTools.send(Runtime.enable());
+
+devTools.addListener(
+        Runtime.exceptionThrown(),
+        exception -> {
+
+            System.out.println(
+                    "JavaScript Exception");
+
+            System.out.println(
+                    exception.getExceptionDetails()
+                             .getText());
+        });
+
+```
+
+Output:
+
+```text
+JavaScript Exception
+
+ReferenceError:
+customerId is undefined
+```
+
+
+## 10. Capture New Tab / Popup Events
+
+Monitor popup creation.
+
+
+```java
+
+devTools.send(Target.enableDiscoverTargets(true));
+
+devTools.addListener(
+        Target.targetCreated(),
+        target -> {
+
+            System.out.println(
+                    "New Target Created");
+
+            System.out.println(
+                    target.getTargetInfo().getUrl());
+        });
+
+```
+
+Use Case:
+
+```text
+
+Payment Gateway Window
+
+OAuth Login Popup
+
+External Links
+
+```
+
+
+## 11. Capture Security Certificate Events
+
+Monitor SSL/TLS issues.
+
+
+```java
+
+import org.openqa.selenium.devtools.v138.security.Security;
+
+devTools.send(Security.enable());
+
+devTools.addListener(
+        Security.securityStateChanged(),
+        event -> {
+
+            System.out.println(
+                    "Security State : "
+                    + event.getSecurityState());
+        });
+
+```
+
+Output:
+
+```text
+
+Security State :
+SECURE
+
+```
+
+## 12. Capture Performance Events
+
+Track browser performance activity.
+
+```java
+
+import org.openqa.selenium.devtools.v138.performance.Performance;
+
+devTools.send(Performance.enable());
+
+driver.get("https://example.com");
+
+System.out.println(
+        devTools.send(
+                Performance.getMetrics()));
+
+```
+
+Useful metrics:
+
+```text
+JSHeapUsedSize
+TaskDuration
+Nodes
+LayoutCount
+```
+
+## 13. Simple Browser Event Logger Utility
+
+```java
+
+public class BrowserEventLogger {
+
+    public static void startCapture(
+            ChromeDriver driver) {
+
+        DevTools devTools =
+                driver.getDevTools();
+
+        devTools.createSession();
+
+        devTools.send(
+                Network.enable(
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty()));
+
+        devTools.addListener(
+                Network.requestWillBeSent(),
+                request -> {
+
+                    System.out.println(
+                            "[REQUEST] "
+                            + request.getRequest()
+                                     .getUrl());
+                });
+
+        devTools.addListener(
+                Network.responseReceived(),
+                response -> {
+
+                    System.out.println(
+                            "[RESPONSE] "
+                            + response.getResponse()
+                                      .getStatus()
+                            + " "
+                            + response.getResponse()
+                                      .getUrl());
+                });
+    }
+}
+
+```
+
+Usage:
+
+```java
+
+ChromeDriver driver = new ChromeDriver();
+
+BrowserEventLogger.startCapture(driver);
+
+driver.get("https://myapp.com");
+
+```
+
+
+
+## High-Value Browser Events for Test team:
+
+*Navigation Events**
+- frameNavigated
+- loadEventFired
+- domContentEventFired
+
+**Network Events**
+- requestWillBeSent
+- responseReceived
+- loadingFailed
+
+**Browser Events**
+- entryAdded
+- exceptionThrown
+- downloadWillBegin
+- targetCreated
+
+**Security Events**
+- securityStateChanged
+- certificateError
+
+**Performance Events**
+- Performance Metrics
+- Task Duration
+- Heap Usage
+- DOM Metrics
+
+**Performance Monitoring**
+- Track page load lifecycle
+- Track DOM readiness
+- Track rendering performance
+
+**Defect Analysis**
+- Capture JS Exception
+- Capture Failed API Call
+- Capture Console Error
+
+**CI/CD Execution Diagnostics**
+- Store browser events
+- Attach to test reports
+- Analyze failed executions
+
+**Distributed Systems Testing**
+- Monitor Browser Events +  Monitor API Calls  + Monitor Performance Metrics  + Monitor Console Errors
+
+
+
 
 
 
