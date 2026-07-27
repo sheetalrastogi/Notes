@@ -778,6 +778,251 @@ driver.get("https://example.com");
 ```
 
 
+## CDP Usage case for "Geo location" testing
+-------------------------------------------------
+
+## Geolocation Override Using Chrome DevTools Protocol
+-----------------------------------------------------------
+
+Geolocation Override allows Selenium tests to simulate users from different geographic locations without physically being in those locations.
+
+This is useful for testing:
+
+- Location-based services
+- Maps applications
+- Insurance premium calculations
+- Regional content
+- Store locator functionality
+- Geo-restricted features
+- Tax and pricing calculations
+
+
+## Basic Geolocation Override Example - Simulate User in Mumbai, India
+
+```Java
+import java.util.Optional;
+
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.v138.emulation.Emulation;
+
+ChromeDriver driver = new ChromeDriver();
+
+DevTools devTools = driver.getDevTools();
+
+devTools.createSession();
+
+devTools.send(
+        Emulation.setGeolocationOverride(
+                Optional.of(19.0760),   // Latitude
+                Optional.of(72.8777),   // Longitude
+                Optional.of(1)));       // Accuracy
+
+driver.get("https://www.google.com/maps");
+```
+
+
+## Example: Store Locator Testing 
+
+```text
+User opens application
+↓
+Application detects location
+↓
+Nearest stores displayed
+```
+
+**Override Location to New York**
+```java
+devTools.send(
+      Emulation.setGeolocationOverride(
+              Optional.of(40.7128),
+              Optional.of(-74.0060),
+              Optional.of(1)));
+```
+Validation:
+```java
+List<WebElement> stores = driver.findElements(By.className("store"));
+
+Assert.assertTrue(stores.size() > 0);
+```
+
+
+## Example:  Google Maps Validation
+
+Test route generation from different locations
+
+```java
+devTools.send(
+      Emulation.setGeolocationOverride(
+              Optional.of(28.6139),
+              Optional.of(77.2090),
+              Optional.of(1)));
+
+driver.get("https://maps.google.com");
+```
+
+Validate:
+- Current location pinned correctly
+- Directions generated correctly
+- Nearby locations displayed
+
+
+## Example: Geo-Fencing Validation
+
+```text
+Scenario: Feature available only in a specific country.
+
+USA Users
+↓
+Feature Enabled
+
+Other Countries
+↓
+Feature Hidden
+```
+
+usage:  Set USA Location
+
+```java
+devTools.send(
+      Emulation.setGeolocationOverride(
+              Optional.of(37.7749),
+              Optional.of(-122.4194),
+              Optional.of(1)));
+```
+
+Verify
+```java
+Assert.assertTrue(
+        driver.findElement(
+                By.id("premiumFeature"))
+                .isDisplayed());
+```
+
+
+## Example: Regional Language Testing
+
+```text
+Germany
+      ↓
+German Content
+
+France
+      ↓
+French Content
+
+India
+      ↓
+English Content
+```
+
+
+```java
+devTools.send(
+      Emulation.setGeolocationOverride(
+              Optional.of(52.5200),
+              Optional.of(13.4050),
+              Optional.of(1)));
+
+```
+
+Verify:
+```java
+String language =
+        driver.findElement(By.tagName("html"))
+              .getAttribute("lang");
+
+Assert.assertEquals(language, "de");
+```
+
+
+Other examples:
+- Weather Application Testing
+- Food Delivery Application
+- Switch Locations During Same Test
+
+
+## Reusable utility method:
+
+```java
+public class GeoLocationUtil {
+
+    public static void setLocation(
+            ChromeDriver driver,
+            double latitude,
+            double longitude) {
+
+        DevTools devTools =
+                driver.getDevTools();
+
+        devTools.createSession();
+
+        devTools.send(
+                Emulation.setGeolocationOverride(
+                        Optional.of(latitude),
+                        Optional.of(longitude),
+                        Optional.of(1)));
+    }
+}
+```
+
+Usage:
+```java
+GeoLocationUtil.setLocation(
+        driver,
+        19.0760,
+        72.8777);
+
+driver.get("https://myapp.com");
+```
+
+
+
+**Common Latitude & Longitude Values**
+------------------------------------------
+Mumbai        : 19.0760, 72.8777
+Delhi         : 28.6139, 77.2090
+Bangalore     : 12.9716, 77.5946
+London        : 51.5074, -0.1278
+Paris         : 48.8566, 2.3522
+Tokyo         : 35.6762, 139.6503
+New York      : 40.7128, -74.0060
+San Francisco : 37.7749, -122.4194
+
+
+**QA Use Cases**
+-------------------
+
+- Insurance
+  - Location-Based Premium Rating
+  - Territory Risk Calculation
+  - Policy Availability Validation
+
+- Banking
+  - Country-Specific Features
+  - Regional Compliance Rules
+  - Branch Locator Validation
+
+- Retail
+  - Store Locator
+  - Regional Offers
+  - Localized Pricing
+
+- Travel
+  - Nearby Hotels
+  - Taxi Availability
+  - Trip Recommendations
+
+- Healthcare
+  - Nearest Hospital Search
+  - Doctor Availability
+  - Emergency Service Routing
+
+
+
+
+
 
 
  
