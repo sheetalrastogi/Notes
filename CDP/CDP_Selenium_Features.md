@@ -1020,6 +1020,192 @@ San Francisco : 37.7749, -122.4194
   - Emergency Service Routing
 
 
+## Emulating iPhone and Other Devices Using Chrome DevTools Protocol
+-----------------------------------------------------------------------
+
+Chrome DevTools Protocol (CDP) allows Selenium 4 to emulate different mobile devices by overriding:
+
+- Screen Width
+- Screen Height
+- Device Scale Factor
+- Mobile Viewport
+- Touch Events
+- User Agent
+
+
+A realistic mobile simulation typically combines:
+
+
+```text
+Device Metrics Override
++ User Agent Override
++ Touch Emulation
++ Geolocation Override
++ Network Throttling
++ Responsive Layout Validation
+```
+
+
+## Example 1: Emulate iPhone 14 Pro
+
+```java
+import java.util.Optional;
+
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.v138.emulation.Emulation;
+
+ChromeDriver driver = new ChromeDriver();
+
+DevTools devTools = driver.getDevTools();
+devTools.createSession();
+
+// Device Metrics
+devTools.send(
+    Emulation.setDeviceMetricsOverride(
+            393,    // width
+            852,    // height
+            3,      // device scale factor
+            true,   // mobile
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty()));
+
+// User Agent
+driver.executeCdpCommand(
+        "Network.setUserAgentOverride",
+        java.util.Map.of(
+                "userAgent",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1"));
+
+driver.get("https://www.google.com");
+```
+
+
+## Example 2: Emulate iPhone 15 Pro
+
+```java
+devTools.send(
+    Emulation.setDeviceMetricsOverride(
+            393,
+            852,
+            3,
+            true,
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty()));
+```
+
+
+**Common Device Profiles -- iOS**
+
+Device             Width   Height  DPR
+---------------------------------------
+iPhone SE          375     667     2
+iPhone XR          414     896     2
+iPhone 12 Pro      390     844     3
+iPhone 13 Pro      390     844     3
+iPhone 14 Pro      393     852     3
+iPhone 15 Pro      393     852     3
+iPhone 15 Pro Max  430     932     3
+iPad Mini          768     1024    2
+iPad Air           820     1180    2
+iPad Pro 11"       834     1194    2
+iPad Pro 12.9"     1024    1366    2
+
+**Common Device Profiles -- Android**
+
+Device                 Width   Height   DPR
+--------------------------------------------
+Pixel 5                393     851      2.75
+Pixel 7                412     915      2.63
+Pixel 8 Pro            448     998      3
+Galaxy S21             384     854      2.81
+Galaxy S22 Ultra       412     915      3.5
+Galaxy S23             360     780      3
+Galaxy S24 Ultra       412     915      3.5
+OnePlus 11             412     919      3
+Xiaomi 13 Pro          393     873      3
+
+
+## Reusable Utility Method
+
+```java
+public static void emulateDevice(
+        DevTools devTools,
+        int width,
+        int height,
+        double scaleFactor) {
+
+    devTools.send(
+        Emulation.setDeviceMetricsOverride(
+                width,
+                height,
+                scaleFactor,
+                true,
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty()));
+}
+
+```
+Usage:
+```java
+emulateDevice(
+        devTools,
+        393,
+        852,
+        3);
+```
+
+
+## Other CDP Features for mobile emulation
+
+## Emulate Touch Screen
+
+```java
+driver.executeCdpCommand(
+    "Emulation.setTouchEmulationEnabled",
+    java.util.Map.of(
+        "enabled", true));
+```
+
+
+## Emulate Mobile Network + Device
+
+Combine device emulation with network throttling.
+
+```java
+
+devTools.send(
+    org.openqa.selenium.devtools.v138.network.Network
+        .emulateNetworkConditions(
+            false,
+            200,
+            50000,
+            20000,
+            Optional.empty()));
+```
+
+
 
 
 
