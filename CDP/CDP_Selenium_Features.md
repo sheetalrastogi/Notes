@@ -1205,6 +1205,346 @@ devTools.send(
             Optional.empty()));
 ```
 
+## Console logs example usages with Chrome Dev Protocol (CDP)
+--------------------------------------------------------------------
+
+## Capture Browser Console Logs Using Chrome DevTools Protocol
+----------------------------------------------------------------
+
+Capturing browser console logs is extremely useful for:
+
+- Detecting JavaScript errors
+- API failures surfaced in the browser
+- Monitoring application warnings
+- Troubleshooting UI issues
+- Capturing client-side exceptions
+- Identifying failed resource loading
+
+
+## Example 1: Capture All Browser Console Logs
+
+```java
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.v138.log.Log;
+
+ChromeDriver driver = new ChromeDriver();
+
+DevTools devTools = driver.getDevTools();
+devTools.createSession();
+
+// Enable Browser Logs
+devTools.send(Log.enable());
+
+// Listen for Console Events
+devTools.addListener(
+        Log.entryAdded(),
+        logEntry -> {
+
+            System.out.println(
+                    "Level : "
+                    + logEntry.getLevel());
+
+            System.out.println(
+                    "Text  : "
+                    + logEntry.getText());
+
+            System.out.println(
+                    "URL   : "
+                    + logEntry.getUrl());
+
+            System.out.println(
+                    "------------------------------------------------");
+        });
+
+driver.get("https://example.com");
+```
+
+Sample output:
+
+```text
+Level : INFO
+Text  : Application loaded successfully
+URL   : https://example.com
+
+------------------------------------------------
+
+Level : WARNING
+Text  : Deprecated API detected
+URL   : https://example.com
+
+------------------------------------------------
+
+Level : ERROR
+Text  : Uncaught TypeError: Cannot read property 'name'
+URL   : https://example.com
+
+------------------------------------------------
+
+```
+
+
+## Example 2: Capture JavaScript Errors Only
+
+Many organizations fail automation execution whenever JavaScript errors occur.
+
+```java
+devTools.send(Log.enable());
+
+devTools.addListener(
+        Log.entryAdded(),
+        log -> {
+
+            if(log.getLevel().toString()
+                  .equalsIgnoreCase("error"))
+            {
+                System.out.println(
+                        "JS Error Found");
+
+                System.out.println(
+                        log.getText());
+            }
+        });
+```
+
+Sample output:
+
+```text
+JS Error Found
+
+Uncaught TypeError:
+Cannot read property 'value' of undefined
+```
+
+
+
+## Example 3: Fail Test When Console Error Appears
+
+```java
+AtomicBoolean errorFound =
+        new AtomicBoolean(false);
+
+devTools.send(Log.enable());
+
+devTools.addListener(
+        Log.entryAdded(),
+        log -> {
+
+            if(log.getLevel().toString()
+                  .equalsIgnoreCase("error"))
+            {
+                errorFound.set(true);
+
+                System.out.println(
+                        log.getText());
+            }
+        });
+
+driver.get("https://myapp.com");
+
+// Test Steps
+
+Assert.assertFalse(
+        errorFound.get(),
+        "Console error found");
+```
+
+
+## Example 4: Capture Console Logs During User Actions
+
+Scenario:
+```text
+Login
+ ↓
+Search Policy
+ ↓
+Submit Claim
+ ↓
+Capture Any JS Errors
+```
+
+```java
+devTools.send(Log.enable());
+
+devTools.addListener(
+        Log.entryAdded(),
+        log -> {
+
+            System.out.println(
+                    log.getLevel()
+                    + " : "
+                    + log.getText());
+        });
+
+driver.findElement(By.id("username")).sendKeys("admin");
+
+driver.findElement(By.id("password")).sendKeys("password");
+
+driver.findElement(By.id("loginBtn")).click();
+
+```
+
+
+## Example 5: Capture Failed Resource Loading
+
+Browser console often reports missing files.
+
+```java
+
+devTools.addListener(
+        Log.entryAdded(),
+        log -> {
+
+            if(log.getText()
+                  .contains("Failed"))
+            {
+                System.out.println(
+                        "Resource Load Failure");
+
+                System.out.println(
+                        log.getText());
+            }
+        });
+
+```
+
+Sample output:
+```text
+Failed to load resource:
+404 (Not Found)
+```
+
+
+## Example 6: Capture API Errors Reported in Console
+
+Many SPA applications log API failures.
+
+```java
+devTools.addListener(
+        Log.entryAdded(),
+        log -> {
+
+            if(log.getText()
+                  .contains("API"))
+            {
+                System.out.println(
+                        "API Error Detected");
+
+                System.out.println(
+                        log.getText());
+            }
+        });
+```
+
+Sample output:
+
+```text
+API Error Detected
+
+Failed to fetch customer details
+HTTP Status 500
+```
+
+
+## Example 7: Store Console Logs in Framework List
+
+```java
+List<String> browserLogs =
+        new ArrayList<>();
+
+devTools.send(Log.enable());
+
+devTools.addListener(
+        Log.entryAdded(),
+        log -> {
+
+            browserLogs.add(
+                    log.getLevel()
+                    + " : "
+                    + log.getText());
+        });
+
+```
+
+Usage:  Print at End of Test
+
+```java
+
+browserLogs.forEach(System.out::println);
+
+```
+
+## Example 8: Capture Logs with Timestamp
+
+```java
+
+devTools.addListener(
+        Log.entryAdded(),
+        log -> {
+
+            System.out.println(
+                    java.time.LocalDateTime.now()
+                    + " | "
+                    + log.getLevel()
+                    + " | "
+                    + log.getText());
+        });
+
+```
+
+Sample output:
+
+```text
+2026-07-27T09:15:10 | INFO | Page Loaded
+
+2026-07-27T09:15:15 | ERROR | API Timeout
+
+2026-07-27T09:15:20 | WARNING | Deprecated API
+```
+
+
+
+## Framework Utility Class
+
+```java
+
+public class ConsoleLogger {
+
+    public static void startLogging(
+            ChromeDriver driver) {
+
+        DevTools devTools =
+                driver.getDevTools();
+
+        devTools.createSession();
+
+        devTools.send(Log.enable());
+
+        devTools.addListener(
+                Log.entryAdded(),
+                log -> {
+
+                    System.out.println(
+                            log.getLevel()
+                            + " : "
+                            + log.getText());
+                });
+    }
+}
+
+```
+
+Usage:
+
+```java
+ChromeDriver driver = new ChromeDriver();
+
+ConsoleLogger.startLogging(driver);
+
+driver.get("https://myapp.com");
+
+```
+
 
 
 
