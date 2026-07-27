@@ -85,14 +85,73 @@ System.out.println(result);
 }
 ```
 
----
+## Capture Browser Console Output
+-------------------------------------
+```Java
+	DevTools devTools = ((ChromeDriver) driver).getDevTools();
 
-# Capture Browser Console Output
+	devTools.createSession();
 
+	devTools.send(Log.enable());
+
+	devTools.addListener(Log.entryAdded(),entry-> {
+	            System.out.println(entry.getText());
+	 });
+	
+	// Sample output:
+	Uncaught TypeError
+	Resource failed to load
+	API response error
+```
+
+## Capture Network Response Content
+---------------------------------------
 ```java
-DevTools devTools =
-        ((ChromeDriver) driver)
-                .getDevTools();
+	DevTools devTools = ((ChromeDriver) driver).getDevTools();
 
-devTools.createSession();
+	devTools.createSession();
+
+	devTools.send(Network.enable(Optional.empty(),Optional.empty(),Optional.empty()));
+
+	devTools.addListener(Network.responseReceived(),response->
+	{
+	            System.out.println(response.getResponse().getUrl());
+	            System.out.println(response.getResponse().getStatus());
+	});
+```	
+	//Sample output:
+	https://api.company.com/customer
+	200
+
+	https://api.company.com/policy
+	500
+
+
+## Reusable Utility for Command Output
+## Execute Shell Commands Using ProcessBuilder
+-----------------------------------------------
+```Java
+	public static String executeCommand(String command) throws Exception {
+		ProcessBuilder builder = new ProcessBuilder("cmd", "/c", command);
+
+		Process process = builder.start();
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+		StringBuilder output = new StringBuilder();
+
+		String line;
+
+		while ((line = reader.readLine()) != null) {
+			output.append(line).append("\n");
+		}
+
+		return output.toString();
+	}
+```
+	// Usage:
+	String result = executeCommand("ipconfig");
+	System.out.println(result);
+
+	// Useful for: ipconfig, ping, dir, curl, tasklist
 
