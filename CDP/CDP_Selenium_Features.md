@@ -155,3 +155,196 @@ System.out.println(result);
 
 	// Useful for: ipconfig, ping, dir, curl, tasklist
 
+
+## Network Monitoring & Interception
+
+## Example: Capture All Network Requests and Responses
+-------------------------------------------------------
+
+
+```java
+	public static void main(String[] args) {
+
+		WebDriver driver = new ChromeDriver();
+
+		DevTools devTools = ((ChromeDriver) driver).getDevTools();
+
+		devTools.createSession();
+
+		devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+
+		// Capture Requests
+		devTools.addListener(Network.requestWillBeSent(), request -> {
+
+			System.out.println("Request URL: " + request.getRequest().getUrl());
+
+			System.out.println("Method: " + request.getRequest().getMethod());
+
+			System.out.println("------------------------------------------------");
+		});
+
+		// Capture Responses
+		devTools.addListener(Network.responseReceived(), response -> {
+
+			System.out.println("Response URL: " + response.getResponse().getUrl());
+
+			System.out.println("Status Code: " + response.getResponse().getStatus());
+
+			System.out.println("------------------------------------------------");
+		});
+
+		driver.get("https://myapp.com");
+
+		// user actions here
+	}
+```
+
+Output:
+--------
+Request URL:
+https://myapp.com/api/policies/12345
+
+Method:
+GET
+
+------------------------------------------
+
+Response URL:
+https://myapp.com/api/policies/12345
+
+Status Code:
+200
+
+
+
+## Example: Monitor API Triggered by Button Click
+----------------------------------------------------
+
+```java
+ 	public static void main(String[] args) {
+		// Example: Monitor API Triggered by Button Click
+		devTools.addListener(Network.responseReceived(), response -> {
+
+			String url = response.getResponse().getUrl();
+
+			if (url.contains("/api/policies")) {
+				System.out.println("Policy API Called");
+
+				System.out.println("Status: " + response.getResponse().getStatus());
+			}
+		});
+
+		driver.findElement(By.id("policyNumber")).sendKeys("12345");
+
+		driver.findElement(By.id("searchBtn")).click();
+
+	}
+```
+	
+	// Output
+	Policy API Called
+	Status: 200
+
+## Example:  Capture Response Headers:
+----------------------------------------
+
+
+```java
+devTools.addListener(
+        Network.requestWillBeSent(),
+        req -> {
+
+            System.out.println(req.getRequest().getHeaders());
+        });
+```
+// Output:
+{
+ Authorization=Bearer xyz123,
+ Content-Type=application/json,
+ User-Agent=Chrome
+}
+
+-----------
+
+```java
+devTools.addListener(
+        Network.responseReceived(),
+        resp -> {
+
+            System.out.println(
+                resp.getResponse()
+                    .getHeaders());
+        });
+```
+
+Sample Output
+{
+ Content-Type=application/json,
+ Cache-Control=no-cache,
+ Server=nginx
+}
+
+
+
+## Example: Capture Only Failed API Calls
+---------------------------------------------
+```java
+
+	public static void main(String[] args) {
+		devTools.addListener(Network.responseReceived(), response -> {
+
+			int status = response.getResponse().getStatus().intValue();
+
+			if (status >= 400) {
+				System.out.println("FAILED API");
+
+				System.out.println(response.getResponse().getUrl());
+
+				System.out.println(status);
+			}
+		});
+
+	}
+```
+
+	// Output 
+	FAILED API
+	https:// myapp.com/api/policy
+	500
+
+
+## Example: Collect Network Traffic in a Framework
+---------------------------------------------------------
+
+```java
+
+public class NetworkLogger {
+
+	public static void startNetworkCapture(ChromeDriver driver) {
+
+		DevTools devTools = driver.getDevTools();
+
+		devTools.createSession();
+
+		devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+
+		devTools.addListener(Network.responseReceived(), response -> {
+
+			System.out.println(response.getResponse().getUrl() + " : " + response.getResponse().getStatus());
+		});
+	}
+}
+
+```
+Usage
+
+```java
+ChromeDriver driver = new ChromeDriver();
+NetworkLogger.startNetworkCapture(driver);
+driver.get("https://myapp.com");
+```
+
+
+
+
+
