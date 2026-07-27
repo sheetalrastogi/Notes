@@ -345,6 +345,116 @@ driver.get("https://myapp.com");
 ```
 
 
+## Request Blocking with CDP
+========================
+
+## Request Blocking with CDP
+--------------------------------
+
+## Example: Simulate a scenario where stylesheets fail to load.
+```java
+		ChromeDriver driver = new ChromeDriver();
+
+		DevTools devTools = driver.getDevTools();
+		devTools.createSession();
+
+		devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+
+		devTools.send(Network.setBlockedURLs(List.of("*.css")));
+
+		driver.get("https://example.com");
+```
+
+Use Cases:
+- Verify page functionality without styles
+- Test graceful degradation
+- Identify CSS dependencies
+
+## Example:  Simulate Block Images to Prevent image loading.
+```java
+		devTools.send(Network.setBlockedURLs(List.of("*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp")));
+```
+Use Cases:
+- Faster test execution
+- Reduced bandwidth usage
+- Performance testing
+
+
+## Example: Block JavaScript Files, Simulate broken frontend dependencies.
+
+```java
+		devTools.send(Network.setBlockedURLs(List.of("*.js")));
+
+		// Validation
+		driver.get("https://example.com");
+		System.out.println(driver.getTitle());
+```
+Use Cases:
+- Application resilience validation
+- Error handling verification
+- Progressive enhancement testing
+
+
+## Example: Block Specific API Endpoint
+
+Suppose during execution application calls:   https://api.company.com/policy/search  and as tester, you need to Block only this API.
+```java
+		devTools.send(Network.setBlockedURLs(List.of("*policy/search*")));
+```
+
+Use Cases:
+- Simulate API downtime
+- Verify user-friendly error messages
+- Validate retry mechanisms
+
+
+## Example: Block entire domain:
+```java
+		devTools.send(Network.setBlockedURLs(List.of("*api.company.com*")));
+```
+
+Use Cases:
+- Block Analytics Services
+```java
+		devTools.send(Network.setBlockedURLs(List.of("*google-analytics.com*", "*adservice.google.com*")));
+```
+
+Benefits:
+- Faster execution
+- Cleaner network traffic
+- Focus on business APIs
+
+
+## Example: Simulate Third-Party Service Failure
+```java
+		devTools.send(Network.setBlockedURLs(List.of("*paymentgateway.com*")));
+```
+
+Example usage:
+- Payment Gateway
+- Address Validation Service
+- Credit Score Service
+- SMS Service
+
+## Example: Validate Request Blocking with Listener
+
+```java
+		devTools.addListener(Network.loadingFailed(), failed -> {
+
+			System.out.println("Blocked URL: " + failed.getRequestId());
+
+			System.out.println("Reason: " + failed.getErrorText());
+		});
+```
+Sample Output
+- Blocked URL: 12345
+- Reason: net::ERR_BLOCKED_BY_CLIENT
+
+
+
+ 
+
+
 
 
 
