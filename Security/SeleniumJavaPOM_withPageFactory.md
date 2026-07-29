@@ -267,7 +267,7 @@ DriverFactory.initDriver(
         ExecutionMode.REMOTE,
         headless=true,
         incognito=true);
-```java
+```
 
 Example:
 
@@ -277,4 +277,4 @@ WebDriver driver =
                 Browser.CHROME,
                 Environment.QA,
                 ExecutionMode.REMOTE);
-```java
+```
