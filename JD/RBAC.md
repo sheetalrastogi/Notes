@@ -9,3 +9,7 @@
 - Regularly analyse Firebase / Crashlytics data to control app stability trends.
 - Use Apple TestFlight and Google Play Internal Testing to verify and validate new builds.
 -  
+
+
+**Sales Force**
+- Design and architect scalable Salesforce solutions using LWC (Lightning Web Components), Apex, Sales Cloud and Service Cloud.
