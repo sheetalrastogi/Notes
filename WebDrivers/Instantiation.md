@@ -24,6 +24,8 @@ WebDriver driver = new EdgeDriver();
 EdgeOptions options = new EdgeOptions();
         options.addArguments("--start-maximized");
         options.addArguments("--inprivate");
+	    options.addArguments("--headless=new");
+		options.addArguments("--window-size=1920,1080");
 
         WebDriver driver = new EdgeDriver(options);
 
@@ -32,6 +34,7 @@ WebDriver driver = new FirefoxDriver();
 
 FirefoxOptions options = new FirefoxOptions();
         options.addArguments("-private");
+		options.addArguments("-headless");
 
         WebDriver driver = new FirefoxDriver(options);
 ```
