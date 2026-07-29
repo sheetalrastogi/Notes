@@ -299,4 +299,27 @@ options.setExperimentalOption("mobileEmulation", mobileEmulation);
 WebDriver driver = new ChromeDriver(options);
 ```
 
+##Mobile WebDriver simulation for FirefoxDriver
+--------------------------------------------------
+
+Firefox does not provide an equivalent Selenium capability like
+
+
+```java
+options.setExperimentalOption(
+    "mobileEmulation",
+    Map.of("deviceName", "iPhone 14 Pro"));
+```
+
+
+One can simulate a mobile viewport by resizing the browser window.
+
+```Java
+        WebDriver driver = new FirefoxDriver();
+
+        // iPhone 14 Pro viewport
+        driver.manage().window().setSize(new Dimension(393, 852));
+
+        driver.get("https://www.google.com");
+```
 
