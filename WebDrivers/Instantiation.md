@@ -256,3 +256,47 @@ services:
 	docker ps
 ```
 
+
+-----------------------------
+
+
+##Chrome Mobile Emulation:
+--------------------------
+
+```java
+        ChromeOptions options = new ChromeOptions();
+        options.setExperimentalOption("mobileEmulation", Map.of("deviceName", "iPhone 14 Pro"));
+
+        WebDriver driver = new ChromeDriver(options);
+```
+
+
+##Edge Mobile Emulation:
+-----------------------
+
+```java
+        EdgeOptions options = new EdgeOptions();
+        options.setExperimentalOption("mobileEmulation", Map.of("deviceName", "iPhone 14 Pro"));
+
+        WebDriver driver = new EdgeDriver(options);
+```
+
+##Custom Mobile Emulation:
+----------------------------
+
+Instead of using predefined devices, define your own device as follow:
+
+```java
+ChromeOptions options = new ChromeOptions();
+
+Map<String, Object> mobileEmulation = new HashMap<>();
+	mobileEmulation.put("width", 412);
+	mobileEmulation.put("height", 915);
+	mobileEmulation.put("pixelRatio", 3.0);
+
+options.setExperimentalOption("mobileEmulation", mobileEmulation);
+
+WebDriver driver = new ChromeDriver(options);
+```
+
+
