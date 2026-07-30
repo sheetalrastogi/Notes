@@ -1,6 +1,6 @@
 # Selenium Grid Status API Validation Using RestAssured
 
-If you're already using **RestAssured** in your Selenium automation framework, it's a clean way to validate Grid availability before creating a `RemoteWebDriver`. 【1-0d39da】
+If you're already using **RestAssured** in your Selenium automation framework, it's a clean way to validate Grid availability before creating a `RemoteWebDriver`. 
 
 ---
 
