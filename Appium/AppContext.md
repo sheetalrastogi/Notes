@@ -58,8 +58,7 @@ driver.context("NATIVE_APP");
 ```java
 public static void printContexts(AppiumDriver driver) {
 
-    Set<String> contexts =
-            driver.getContextHandles();
+    Set<String> contexts = driver.getContextHandles();
 
     System.out.println("Available Contexts:");
 
@@ -67,11 +66,8 @@ public static void printContexts(AppiumDriver driver) {
 
     if (contexts.stream()
                 .anyMatch(c -> c.contains("WEBVIEW"))) {
-
         System.out.println("Hybrid App Detected");
-
     } else {
-
         System.out.println("Native App Detected");
     }
 }
