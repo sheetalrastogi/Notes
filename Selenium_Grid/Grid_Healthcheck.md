@@ -2,7 +2,6 @@
 
 If you're already using **RestAssured** in your Selenium automation framework, it's a clean way to validate Grid availability before creating a `RemoteWebDriver`. 
 
----
 
 ## Maven Dependency
 
@@ -14,7 +13,6 @@ If you're already using **RestAssured** in your Selenium automation framework, i
 </dependency>
 ```
 
----
 
 ## 1. Basic Selenium Grid Health Check
 
@@ -24,11 +22,11 @@ import io.restassured.response.Response;
 import static io.restassured.RestAssured.*;
 
 public class GridHealthCheck {
-*    public static void main(String*] args) {
+    public static void main(String*] args) {
 
-        Response respon*e =
+        Response response =
                 given()
-      *         .when()
+                .when()
                     .get("http://localhost:4444/status")
                 .then()
                     .statusCode(200)
@@ -39,8 +37,6 @@ public class GridHealthCheck {
     }
 }
 ```
-
----
 
 ## 2. Verify Grid is Ready
 
@@ -89,8 +85,6 @@ public class GridHealthCheck {
 }
 ```
 
----
-
 ## 3. Utility Method for Framework
 
 ```java
@@ -110,10 +104,8 @@ public class SeleniumGridUtil {
                     .when()
                         .get(gridUrl + "/status");
 
-            return response.statusCode() == 200
-                    &&
-                    response.jsonPath()
-                            .getBoolean("value.ready");
+            return response.statusCode() == 200  &&
+                    response.jsonPath().getBoolean("value.ready");
 
         } catch(Exception ex) {
 
@@ -126,14 +118,11 @@ public class SeleniumGridUtil {
 ### Usage
 
 ```java
-boolean status =
-        SeleniumGridUtil.verifyGridAvailability(
-                "http://localhost:4444");
+boolean status = SeleniumGridUtil.verifyGridAvailability("http://localhost:4444");
 
 System.out.println(status);
 ```
 
----
 
 ## 4. Fail Test When Grid Is Not Available
 
@@ -147,10 +136,7 @@ public class BaseTest {
     @BeforeSuite
     public void verifyGrid() {
 
-        boolean gridReady =
-                SeleniumGridUtil
-                    .verifyGridAvailability(
-                        "http://localhost:4444");
+        boolean gridReady = SeleniumGridUtil.verifyGridAvailability("http://localhost:4444");
 
         if(!gridReady) {
 
@@ -161,74 +147,50 @@ public class BaseTest {
 }
 ```
 
----
-
 ## 5. Verify Grid Before Creating Driver
 
 ```java
 public static WebDriver createRemoteDriver()
         throws Exception {
 
-    boolean ready =
-            SeleniumGridUtil
-                .verifyGridAvailability(
-                    "http://localhost:4444");
+    boolean ready = SeleniumGridUtil.verifyGridAvailability("http://localhost:4444");
 
     if(!ready) {
 
-        throw new RuntimeException(
-                "Grid is Down");
+        throw new RuntimeException("Grid is Down");
     }
 
-    return new RemoteWebDriver(
-            new URL("http://localhost:4444"),
-            new ChromeOptions());
+    return new RemoteWebDriver(new URL("http://localhost:4444"), new ChromeOptions());
 }
 ```
 
----
 
 ## 6. Wait Until Grid Becomes Available
 
 Useful during Docker/Kubernetes startup.
 
 ```java
-public static void waitForGrid(
-        String gridUrl,
-        int timeoutInSeconds)
-        throws InterruptedException {
+public static void waitForGrid(String gridUrl, int timeoutInSeconds) throws InterruptedException {
 
-    for(int i = 0;
-        i < timeoutInSeconds;
-        i++) {
-
-        boolean ready =
-                SeleniumGridUtil
-                        .verifyGridAvailability(
-                                gridUrl);
+    for(int i = 0; i < timeoutInSeconds; i++) {
+        boolean ready = SeleniumGridUtil.verifyGridAvailability(gridUrl);
 
         if(ready) {
-
-            System.out.println(
-                    "Grid Ready");
-
-            return;
+          System.out.println("Grid Ready");
+          return;
         }
 
         Thread.sleep(1000);
     }
 
-    throw new RuntimeException(
-        "Grid did not start");
+    throw new RuntimeException("Grid did not start");
 }
 ```
 
 ### Usage
 
 ```java
-waitForGrid(
-        "http://localhost:4444",
-        60);
+waitForGrid("http://localhost:4444", 60);
 ```
 
 ---
@@ -249,14 +211,11 @@ public class GridNodes {
                 .when()
                     .get("http://localhost:4444/status");
 
-        int nodes =
-                response.jsonPath()
+        int nodes = response.jsonPath()
                         .getList("value.nodes")
                         .size();
 
-        System.out.println(
-                "Registered Nodes = "
-                + nodes);
+        System.out.println("Registered Nodes = " + nodes);
     }
 }
 ```
@@ -276,12 +235,9 @@ List<Map<String,Object>> nodes =
                 .getList("value.nodes");
 
 for(Map<String,Object> node : nodes) {
+    System.out.println(node.get("id"));
 
-    System.out.println(
-            node.get("id"));
-
-    System.out.println(
-            node.get("uri"));
+    System.out.println(node.get("uri"));
 }
 ```
 
@@ -309,11 +265,9 @@ given()
 ```java
 public class GridHealthChecker {
 
-    public static boolean isGridReady(
-            String gridUrl) {
+    public static boolean isGridReady(String gridUrl) {
 
         try {
-
             return given()
                     .when()
                     .get(gridUrl + "/status")
@@ -328,11 +282,8 @@ public class GridHealthChecker {
         }
     }
 
-    public static int getNodeCount(
-            String gridUrl) {
-
+    public static int getNodeCount(String gridUrl) {
         try {
-
             return given()
                     .when()
                     .get(gridUrl + "/status")
@@ -341,9 +292,7 @@ public class GridHealthChecker {
                     .jsonPath()
                     .getList("value.nodes")
                     .size();
-
         } catch(Exception e) {
-
             return 0;
         }
     }
@@ -353,16 +302,11 @@ public class GridHealthChecker {
 ### Usage
 
 ```java
-if(GridHealthChecker.isGridReady(
-        "http://localhost:4444")) {
+if(GridHealthChecker.isGridReady("http://localhost:4444")) {
 
-    System.out.println(
-        "Grid Available");
+    System.out.println("Grid Available");
 
-    System.out.println(
-        "Nodes : " +
-        GridHealthChecker.getNodeCount(
-            "http://localhost:4444"));
+    System.out.println("Nodes : " + GridHealthChecker.getNodeCount("http://localhost:4444"));
 }
 ```
 
