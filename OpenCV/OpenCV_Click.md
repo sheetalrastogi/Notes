@@ -33,31 +33,24 @@ import org.opencv.imgproc.Imgproc;
 
 public class ImageLocator {
 
-    static {
-        OpenCV.loadLocally();
-    }
+	static {
+		OpenCV.loadLocally();
+	}
 
-    public static Point findImage(String screenshot,
-                                  String template) {
+	public static Point findImage(String screenshot, String template) {
 
-        Mat source = Imgcodecs.imread(screenshot);
-        Mat target = Imgcodecs.imread(template);
+		Mat source = Imgcodecs.imread(screenshot);
+		Mat target = Imgcodecs.imread(template);
 
-        Mat result = new Mat();
+		Mat result = new Mat();
 
-        Imgproc.matchTemplate(
-                source,
-                target,
-                result,
-                Imgproc.TM_CCOEFF_NORMED);
+		Imgproc.matchTemplate(source, target, result, Imgproc.TM_CCOEFF_NORMED);
 
-        Core.MinMaxLocResult match =
-                Core.minMaxLoc(result);
+		Core.MinMaxLocResult match = Core.minMaxLoc(result);
 
-        return match.maxLoc;
-    }
+		return match.maxLoc;
+	}
 }
-
 ```
 
 # Step 3: Click Using Selenium Actions
@@ -65,18 +58,11 @@ public class ImageLocator {
 
 ```java
 
-Point location =
-        ImageLocator.findImage(
-                "screenshot.png",
-                "target.png");
+		Point location = ImageLocator.findImage("screenshot.png", "target.png");
 
-Actions actions = new Actions(driver);
+		Actions actions = new Actions(driver);
 
-actions.moveByOffset(
-        (int) location.x,
-        (int) location.y)
-       .click()
-       .perform();
+		actions.moveByOffset((int) location.x, (int) location.y).click().perform();
 
 ```
 
@@ -85,30 +71,20 @@ actions.moveByOffset(
 
 ```java
 
-Mat source = Imgcodecs.imread("screen.png");
-Mat target = Imgcodecs.imread("button.png");
+		Mat source = Imgcodecs.imread("screen.png");
+		Mat target = Imgcodecs.imread("button.png");
 
-Mat result = new Mat();
+		Mat result = new Mat();
 
-Imgproc.matchTemplate(
-        source,
-        target,
-        result,
-        Imgproc.TM_CCOEFF_NORMED);
+		Imgproc.matchTemplate(source, target, result, Imgproc.TM_CCOEFF_NORMED);
 
-Core.MinMaxLocResult mmr =
-        Core.minMaxLoc(result);
+		Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
 
-int centerX =
-        (int) (mmr.maxLoc.x + target.cols() / 2);
+		int centerX = (int) (mmr.maxLoc.x + target.cols() / 2);
 
-int centerY =
-        (int) (mmr.maxLoc.y + target.rows() / 2);
+		int centerY = (int) (mmr.maxLoc.y + target.rows() / 2);
 
-new Actions(driver)
-        .moveByOffset(centerX, centerY)
-        .click()
-        .perform();
+		new Actions(driver).moveByOffset(centerX, centerY).click().perform();
 
 ```
 
@@ -116,22 +92,17 @@ new Actions(driver)
 ## Another approach - Use Selenium Screenshot and then OpenCV to perform Click
 
 ```java
-File file =
-        ((TakesScreenshot)driver)
-                .getScreenshotAs(OutputType.FILE);
+		File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
-Files.copy(
-        file.toPath(),
-        Paths.get("screen.png"));
+		Files.copy(file.toPath(), Paths.get("screen.png"));
 
 ```
 
 Locate image:
 
 ```java
-Point point =
-        findImage("screen.png",
-                  "loginButton.png");
+
+		Point point = findImage("screen.png", "loginButton.png");
 
 ```
 
@@ -139,12 +110,7 @@ Click action
 
 ```java
 
-new Actions(driver)
-        .moveByOffset(
-            (int)point.x,
-            (int)point.y)
-        .click()
-        .perform();
+		new Actions(driver).moveByOffset((int) point.x, (int) point.y).click().perform();
 
 ```
 
