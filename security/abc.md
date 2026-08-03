@@ -1,8 +1,10 @@
-## Security testing Key Areas to test for a distributed client-server application
+## Security testing Key Areas to test for an Application
 
-Security defects can originate from both the Software Development phase (secure coding/design issues) and the Deployment/Infrastructure phase (configuration and environment weaknesses).
+Security defects can originate from both the **Software Development phase (secure coding/design issues)** and the **Deployment/Infrastructure phase (configuration and environment weaknesses)**.
 
 # 1. Security Defects from Software Development Perspective
+-----
+
 **Authentication Defects**
 ```text
 | Defect                         | Example                                             |
@@ -85,6 +87,7 @@ Security defects can originate from both the Software Development phase (secure 
 ```
 
 # 2. Security Defects from Deployment Perspective
+---
 
 **Network Security Defects**
 
@@ -144,7 +147,8 @@ Security defects can originate from both the Software Development phase (secure 
 | Secrets Stored Unencrypted | Kubernetes secrets exposed in plain text |
 | Missing Network Policies | Unrestricted pod-to-pod network communication |
 ```
-***Cloud Deployment Defects**
+
+**Cloud Deployment Defects**
 ```text
 | Defect Type | Example |
 |------------|----------|
@@ -156,6 +160,7 @@ Security defects can originate from both the Software Development phase (secure 
 ```
 
 ## 3. Distributed-System-Specific Security Defects
+---
 
 **Service-to-Service Communication**
 ```text
@@ -208,7 +213,7 @@ Security defects can originate from both the Software Development phase (secure 
 
 
 ## Network Communication Security Defects in Distributed Applications
-
+---
 When monitoring network traffic using tools such as **Wireshark, Fiddler, Burp Suite, TCPDump, Charles Proxy, Browser DevTools, or API Gateways**, the following security defects are commonly identified.
 
 ```text
