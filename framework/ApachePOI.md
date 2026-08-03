@@ -1,4 +1,4 @@
-## Apache POI example to read Excel data as map of map
+## Apache POI example to read Excel data as List of map
 
 Each column (DataSet1, DataSet2, DataSet3, DataSet4) represents one test data set, while the first column contains the field name
 
