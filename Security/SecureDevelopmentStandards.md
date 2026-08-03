@@ -8,4 +8,6 @@
 | Software Development      | Secure Software Engineering (SSE) | Security-driven software engineering practices applied throughout development |
 | Agile Development         | Secure Agile                    | Security integrated into Agile planning, backlogs, user stories, and sprint activities |
 | Cloud Development         | DevSecCloud                     | Security incorporated into cloud-native development, deployment, and operations |
-| Platform Engineering      | SecPlatformOps                  | Security embedded within platform engineering and self-service platform capabilities |
+| Platform Engineering      | SecPlatformOps                  | Security embedded within platform engineering and self-service platform capabilities |  
+
+SSDLC is the most widely recognized term across OWASP, NIST, Microsoft SDL, and enterprise software engineering practices.
