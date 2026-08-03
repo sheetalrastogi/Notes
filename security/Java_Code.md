@@ -3,25 +3,25 @@
 
 # Static Analysis
 ---------------
-SonarQube
-Checkmarx
-Fortify
-Veracode
-SpotBugs
+- SonarQube
+- Checkmarx
+- Fortify
+- Veracode
+- SpotBugs
 
 # Dependency Scanning
 -------------------
-OWASP Dependency Check
-Snyk
-Dependabot
+- OWASP Dependency Check
+- Snyk
+- Dependabot
 
 # Dynamic Security Testing
 ------------------------
-OWASP ZAP
-Burp Suite
-Netsparker
+- OWASP ZAP
+- Burp Suite
+- Netsparker
 
 # Secrets Detection
 -----------------
-GitLeaks
-TruffleHog
+- GitLeaks
+- TruffleHog
