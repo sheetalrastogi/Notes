@@ -52,9 +52,9 @@ public class ImageTimestampUtil {
 ```
 
 Usage:
-
+```java
 ImageTimestampUtil.addTimestamp("screenshot.png", "timestamped_screenshot.png");
-
+```
 
 # Usage with Selenium Screenshot:
 
