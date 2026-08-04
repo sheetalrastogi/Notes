@@ -2,7 +2,6 @@
 
 
 
-|------------------------|------------------------|---------------------------------------------------------------------|
 | Certificate Type       | Extension(s)           | Expiry Validation Command                                    	|
 |------------------------|------------------------|---------------------------------------------------------------------|
 | PEM                    | `.pem`, `.crt`, `.cer` | `openssl x509 -enddate -noout -in cert.pem`                  	|
@@ -13,7 +12,6 @@
 | Remote HTTPS Site      | N/A              	  | `openssl s_client -connect host:443 \| openssl x509 -enddate -noout`|
 | Kubernetes TLS Secret  | `tls.crt`        	  | `openssl x509 -enddate -noout -in tls.crt` 				|
 | CSR (Certificate Signing Request) | `.csr` 	  | No expiry date exists (CSR contains request information only). 	|
-|------------------------|------------------------|---------------------------------------------------------------------|
 
 
 Example Output for following commands
