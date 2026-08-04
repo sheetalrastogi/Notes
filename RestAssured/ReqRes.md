@@ -237,22 +237,26 @@ keytool -importkeystore \
 -destkeystore client.jks
 
 ```
+# Import certificate to JKS
 
-# 3. Common SSL/mTLS Errors
-
-- PKIX Path Building Failed
-
-Cause: Server certificate not trusted
-Fix:   .trustStore(...)
-
-
-- Bad Certificate
 ```text
-SSLHandshakeException: bad_certificate
-
-Cause:	Wrong client certificate
-	Certificate expired
+keytool -importcert \
+-alias api-cert \
+-file server.crt \
+-keystore truststore.jks
 ```
+# Common SSL/mTLS Errors
+
+1. PKIX Path Building Failed
+2. bad_certificate
+3. certificate_unknown
+4. handshake_failure
+5. Hostname Verification Failed
+6. Invalid keystore format
+7. Expired certificate
+
+
+
 
 
 
