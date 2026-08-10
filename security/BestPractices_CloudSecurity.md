@@ -54,7 +54,7 @@
 20. Adopt a **Zero Trust security model** with continuous verification of users, applications, devices, and database requests.
 
 
-# Network Security Best Practices (Security Analyst Perspective)
+# Network Security Best Practices 
 
 1. Implement **network segmentation and isolation** using VLANs, subnets, and security zones to limit lateral movement.
 2. Enforce **least privilege network access** through firewall rules, access control lists (ACLs), and Zero Trust principles.
@@ -81,3 +81,32 @@
 23. Implement **micro-segmentation and Zero Trust architecture** to verify every user, device, and network transaction.
 24. Regularly review and update **network security policies, standards, and incident response procedures**.
 25. Establish a **defense-in-depth security strategy** using multiple layers of preventive, detective, and corrective controls.
+
+
+# Web Server Security Best Practices 
+
+1. Enforce **HTTPS/TLS encryption** for all web server communications using strong protocols and ciphers.
+2. Harden **web server configurations** by disabling unnecessary services, modules, and default settings.
+3. Implement **least privilege access controls** for server administrators, service accounts, and applications.
+4. Regularly apply **security patches, updates, and hotfixes** to web servers, operating systems, and dependencies.
+5. Restrict access to **administrative interfaces and management ports** using firewalls, VPNs, and IP whitelisting.
+6. Configure **secure HTTP headers** such as CSP, HSTS, X-Frame-Options, and X-Content-Type-Options.
+7. Protect web servers with **Web Application Firewalls (WAFs)** to detect and block malicious traffic.
+8. Continuously **monitor, log, and audit** web server activities for suspicious behavior and security incidents.
+9. Secure **authentication and session management mechanisms** to prevent unauthorized access.
+10. Disable **directory listing, server banners, and version disclosures** to reduce information leakage.
+11. Implement **file integrity monitoring** to detect unauthorized changes to web content and server configurations.
+12. Secure **server-to-server communications** using mutual TLS (mTLS), certificates, and trusted connections.
+13. Protect against **DDoS attacks** using traffic filtering, rate limiting, and mitigation services.
+14. Restrict unnecessary **ports, protocols, and network exposure** to minimize the attack surface.
+15. Secure uploaded files through **validation, sanitization, malware scanning, and access restrictions**.
+16. Protect sensitive data using **encryption, key management, and secure storage practices**.
+17. Implement **centralized logging and SIEM integration** for threat detection and incident response.
+18. Enforce **backup, disaster recovery, and business continuity** controls for critical web server environments.
+19. Conduct regular **vulnerability assessments, penetration testing, and configuration reviews**.
+20. Secure certificates through proper **certificate lifecycle management, renewal, and revocation processes**.
+21. Isolate web servers using **network segmentation, DMZ architecture, and secure zones**.
+22. Protect against **brute force and credential attacks** using MFA, account lockout policies, and rate limiting.
+23. Implement **anti-malware and endpoint protection solutions** on web server hosts.
+24. Enforce **regulatory and industry compliance** with standards such as PCI DSS, GDPR, HIPAA, NIST, and ISO 27001.
+25. Adopt a **Zero Trust security model** with continuous verification of users, devices, applications, and server requests.
