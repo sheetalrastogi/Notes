@@ -28,4 +28,27 @@
 13. Secure **APIs and web services** through strong authentication, authorization, rate limiting, and schema validation.
 14. Regularly **patch and update web servers, frameworks, libraries, and dependencies** to address known vulnerabilities.
 15. Implement a **Zero Trust security model** with continuous verification of users, devices, sessions, and application requests.
-16. 
+
+
+# Database Security Best Practices (Security Analyst Perspective)
+
+1. Enforce **data encryption at rest and in transit** using industry-standard encryption algorithms and protocols.
+2. Implement **least privilege access controls** through RBAC, database roles, and separation of duties.
+3. Secure database access using **multi-factor authentication (MFA)** and strong password policies.
+4. Continuously **monitor, log, and audit** database activities to detect unauthorized access and suspicious behavior.
+5. Perform regular **database vulnerability assessments, security scans, and penetration testing**.
+6. Protect against **SQL Injection and database attacks** through parameterized queries, stored procedures, and input validation.
+7. Implement **database activity monitoring (DAM)** and real-time alerting for security events.
+8. Secure **database backups and replicas** using encryption, access controls, and retention policies.
+9. Ensure proper **key management and secrets protection** for database credentials, encryption keys, and connection strings.
+10. Apply timely **security patches, hotfixes, and database version upgrades** to address known vulnerabilities.
+11. Enable **data masking, tokenization, and anonymization** for sensitive and regulated data.
+12. Enforce **network security controls** through database firewalls, network segmentation, private endpoints, and IP whitelisting.
+13. Regularly review and remove **unused accounts, excessive privileges, and dormant database users**.
+14. Implement **high availability, backup, disaster recovery, and business continuity** controls for critical databases.
+15. Enforce **regulatory and industry compliance** with standards such as PCI DSS, GDPR, HIPAA, SOX, and ISO 27001.
+16. Protect database environments with **configuration hardening and secure baseline standards**.
+17. Secure **database connections and API integrations** using TLS certificates and secure authentication mechanisms.
+18. Maintain **data classification and retention policies** to ensure appropriate protection throughout the data lifecycle.
+19. Implement **database change management and configuration auditing** to track schema and permission changes.
+20. Adopt a **Zero Trust security model** with continuous verification of users, applications, devices, and database requests.
