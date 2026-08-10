@@ -1,3 +1,8 @@
+# Security Analyst Introduction
+
+As a Security Analyst, I help protect enterprise systems by implementing security controls across cloud platforms, applications, databases, networks, and web servers. My focus areas include identity and access management, encryption, vulnerability management, security monitoring, threat detection, compliance governance, and Zero Trust architecture to ensure the confidentiality, integrity, and availability of business-critical assets. 
+
+
 # Cloud Security Best Practices 
 1. Enforce **data encryption at rest and in transit** using strong cryptographic standards.
 2. Implement **network isolation and segmentation** through VPCs, private subnets, and security groups.
