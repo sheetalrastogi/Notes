@@ -51,19 +51,21 @@ Sell
 **Professional Intraday Checklist**
 
 **=> Buy Setup**
+```text
 ✅ Price Above VWAP
 ✅ RSI > 50
 ✅ Volume > Average
 ✅ Higher Highs
 ✅ Market Trend Bullish
-
+```
 --------------------------------
 **=> Sell Setup**
+```text
 ✅ Price Below VWAP
 ✅ RSI < 45
 ✅ Volume Increasing
 ✅ Lower Highs
 ✅ Market Trend Bearish
-
+```
 
 
