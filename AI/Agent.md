@@ -1,0 +1,21 @@
+- Test Design Acceleration & Coverage 
+- Edge, Negative & Exploratory Depth 
+- Defect Narratives & Reproduction Steps 
+- On Demand Functional Test Data 
+- Requirements → Testable Acceptance Criteria 
+- Living BDD with Gherkin 
+- Structured Use Cases & Release Notes 
+- Early Story Refinements 
+- Boilerplate & Unit Tests On Tap 
+- Refactoring & Patterns for Testability 
+- Edge Case & API/Mocks Support 
+- Crisp Sprint Comms & Risk Hygiene 
+- Data Informed Flow Visibility 
+- Lean Ceremony Operations 
+- API/UI Automation Throughput 
+- Reusable Page Objects & Utilities 
+- High Signal Debugging & RCA 
+- Suite Stability & Performance 
+- Framework Governance & Coding Standards 
+- Architecture Docs, CI/CD Strategy & Templates 
+
