@@ -30,7 +30,7 @@
 15. Implement a **Zero Trust security model** with continuous verification of users, devices, sessions, and application requests.
 
 
-# Database Security Best Practices (Security Analyst Perspective)
+# Database Security Best Practices 
 
 1. Enforce **data encryption at rest and in transit** using industry-standard encryption algorithms and protocols.
 2. Implement **least privilege access controls** through RBAC, database roles, and separation of duties.
@@ -52,3 +52,32 @@
 18. Maintain **data classification and retention policies** to ensure appropriate protection throughout the data lifecycle.
 19. Implement **database change management and configuration auditing** to track schema and permission changes.
 20. Adopt a **Zero Trust security model** with continuous verification of users, applications, devices, and database requests.
+
+
+# Network Security Best Practices (Security Analyst Perspective)
+
+1. Implement **network segmentation and isolation** using VLANs, subnets, and security zones to limit lateral movement.
+2. Enforce **least privilege network access** through firewall rules, access control lists (ACLs), and Zero Trust principles.
+3. Secure network communications with **encryption protocols** such as TLS, IPSec, and VPN technologies.
+4. Deploy and maintain **next-generation firewalls (NGFWs)** to filter and inspect inbound and outbound traffic.
+5. Implement **Intrusion Detection and Prevention Systems (IDS/IPS)** to identify and block malicious activities.
+6. Continuously **monitor, log, and audit network traffic** for security incidents and anomalous behavior.
+7. Secure remote access using **VPNs, MFA, and strong authentication mechanisms**.
+8. Perform regular **network vulnerability assessments, penetration testing, and security reviews**.
+9. Protect against **Distributed Denial of Service (DDoS) attacks** using rate limiting, traffic filtering, and mitigation services.
+10. Implement **Network Access Control (NAC)** to validate and authorize devices before granting network access.
+11. Secure wireless networks through **WPA3 encryption, strong authentication, and guest network isolation**.
+12. Apply timely **security patches, firmware upgrades, and configuration hardening** for network devices.
+13. Restrict unnecessary **open ports, protocols, and services** to minimize the attack surface.
+14. Protect critical assets using **demilitarized zones (DMZs)** and secure network architecture designs.
+15. Enable **centralized security logging and SIEM integration** for threat detection, investigation, and incident response.
+16. Secure DNS infrastructure through **DNS filtering, DNSSEC, and malicious domain protection** mechanisms.
+17. Implement **secure routing and switching practices** to prevent spoofing, hijacking, and unauthorized traffic manipulation.
+18. Continuously monitor for **rogue devices, unauthorized connections, and network misconfigurations**.
+19. Maintain **network backup, redundancy, and disaster recovery controls** to ensure business continuity.
+20. Enforce **regulatory and industry compliance** with standards such as PCI DSS, GDPR, HIPAA, NIST, and ISO 27001.
+21. Apply **threat intelligence and proactive threat hunting** to identify emerging network risks.
+22. Secure cloud and hybrid network environments through **private connectivity, segmentation, and secure gateways**.
+23. Implement **micro-segmentation and Zero Trust architecture** to verify every user, device, and network transaction.
+24. Regularly review and update **network security policies, standards, and incident response procedures**.
+25. Establish a **defense-in-depth security strategy** using multiple layers of preventive, detective, and corrective controls.
