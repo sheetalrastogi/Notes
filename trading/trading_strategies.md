@@ -5,7 +5,7 @@
 | Fri High < Thu High | Short-term lower-high weakness | Mon retests Friday's low | Trap late buyers; harvest stops |
 | Wed High < Mon High | Multi-day lower-high weakness | Thu retests Wednesday's low | Stops below Wed low form liquidity |
 
-## 2. ## RSI, VWAP and Volume Trading strategies
+## 2. RSI, VWAP and Volume Trading strategies
 - VWAP identifies institutional direction, 
 - RSI measures momentum, and 
 - Volume confirms conviction behind the move.
