@@ -288,10 +288,26 @@ public void enableInspectorMode() {
 
 ```
 
-Once enabled, simply call:
+# 1. Manual Debugging During Script Development
 
-enableInspectorMode();
+When developing a locator or troubleshooting a flaky element:
 
-Every hover automatically shows diagnostics.
+```java
+WebElement loginBtn = driver.findElement(By.id("loginBtn"));
+new Actions(driver)
+        .moveToElement(loginBtn)
+        .pause(Duration.ofSeconds(2))
+        .perform();
+showElementInspector(loginBtn);
+```
+
+Use Cases:
+
+✓ Verify CSS visibility
+✓ Verify element dimensions
+✓ Check overlay issues
+✓ Check viewport issues
+✓ Validate locator accuracy
+
 
 
