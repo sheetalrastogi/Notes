@@ -30,13 +30,15 @@ public @interface TestInfo {
 ```
 
 # Step 3: Properties File
+```text
 default.author=FrameworkOwner
 default.module=General
 default.jiraId=NOT-ASSIGNED
 default.priority=MEDIUM,REGRESSION
-
+```
 
 # Step 4: Create Validation Exception
+```java
 package framework.exceptions;
 
 public class InvalidPriorityException extends RuntimeException {
@@ -45,6 +47,7 @@ public class InvalidPriorityException extends RuntimeException {
         super(message);
     }
 }
+```
 
 # Step 6: Property reader (specific for Priority enum)
 ```java
