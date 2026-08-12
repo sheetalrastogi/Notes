@@ -324,3 +324,13 @@ public class RetryAnalyzer implements IRetryAnalyzer {
 }
 
 ```
+
+**Sample Output**
+```text
+========================================
+Retry Attempt : 1
+Test Name     : verifyLogin
+Category      : Synchronization Issue
+Root Cause    : TimeoutException : Expected condition failed
+========================================
+```
