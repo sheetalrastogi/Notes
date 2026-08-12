@@ -49,7 +49,7 @@ public class InvalidPriorityException extends RuntimeException {
 }
 ```
 
-# Step 6: Property reader (specific for Priority enum)
+# Step 5: Property reader (specific for Priority enum)
 ```java
 public final class PriorityUtils {
 
@@ -76,7 +76,7 @@ public final class PriorityUtils {
 }
 ```
 
-# Step 5: Priority Validator
+# Step 6: Priority Validator
 
 Since all values are already validated by the compiler, the validator mainly checks for null or empty configurations.
 
@@ -109,7 +109,7 @@ public final class PriorityValidator {
 }
 ```
 
-# Step x:  Validation Listener (Preferred Implementation)
+# Step 7:  Validation Listener (Preferred Implementation)
 
 ```java
 package listeners;
@@ -146,7 +146,7 @@ public class AnnotationValidationListener implements ITestListener {
 }
 ```
 
-# Step 6. Test usage:
+# Step 8. Test usage:
 
 Valid ✅
 
@@ -174,7 +174,7 @@ Output:  **Compilation failure**
 -The enum Priority has no constant URGENT
 
 
-# Step 7: Validate During Metadata Resolution
+# Step 9: Validate During Metadata Resolution
 ```java
 	public static TestMetadata resolve(Method method) {
 
@@ -201,7 +201,7 @@ Output:  **Compilation failure**
 	}
 ```
 
-# Step 8: Stop Execution in Listener
+# Step 10: Stop Execution in Listener
 
 **Option A (Preferred)**: Skip Test Execution
 ```java
