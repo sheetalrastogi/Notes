@@ -1,3 +1,139 @@
+Create a **Custom Annotation** with TestNG based frameworks 
+
+This is useful when you want to attach metadata to test methods, such as:
+- Test Owner
+- Requirement ID
+- Jira Story
+- Module Name
+- Priority
+- Retry Policy
+- Risk Level
+- Automation Type
+
+Following are logical steps you can read the annotation values using an **ITestListener** or  **IInvokedMethodListener**.
+
+
+# Step 1: Create Custom Annotation
+```java
+package annotations;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.annotation.ElementType;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface TestInfo {
+
+	String author();
+
+	String module();
+
+	String jiraId() default "";
+
+	String priority() default "MEDIUM";
+}
+
+```
+# Step 2: Use Annotation in Test Class
+```java
+package tests;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import annotations.TestInfo;
+
+public class LoginTest {
+
+	@Test
+	@TestInfo(author = "Sheetal", module = "Login", jiraId = "QA-1001", priority = "HIGH")
+	public void verifyValidLogin() {
+
+		System.out.println("Executing Login Test");
+		Assert.assertTrue(true);
+	}
+
+	@Test
+	@TestInfo(author = "Sheetal", module = "Login", jiraId = "QA-1002", priority = "CRITICAL")
+	public void verifyInvalidLogin() {
+
+		System.out.println("Executing Invalid Login Test");
+		Assert.assertTrue(true);
+	}
+}
+```
+
+# Step 3: Read Annotation Using ITestListener
+
+```java
+package listeners;
+
+import java.lang.reflect.Method;
+
+import org.testng.ITestListener;
+import org.testng.ITestResult;
+
+import annotations.TestInfo;
+
+public class CustomAnnotationListener implements ITestListener {
+
+	@Override
+	public void onTestStart(ITestResult result) {
+
+		Method method = result.getMethod().getConstructorOrMethod().getMethod();
+
+		if (method.isAnnotationPresent(TestInfo.class)) {
+
+			TestInfo info = method.getAnnotation(TestInfo.class);
+
+			System.out.println("========== TEST INFO ==========");
+			System.out.println("Test Name : " + method.getName());
+			System.out.println("Author    : " + info.author());
+			System.out.println("Module    : " + info.module());
+			System.out.println("Jira ID   : " + info.jiraId());
+			System.out.println("Priority  : " + info.priority());
+			System.out.println("================================");
+		}
+	}
+}
+
+```
+
+# Step 4: Register Listener
+
+**Option 1: testng.xml**
+```xml
+<listeners>
+    <listener class-name="listeners.CustomAnnotationListener"/>
+</listeners>
+```
+
+**Option 2: Annotation**
+```java
+@Listeners(CustomAnnotationListener.class)
+public class LoginTest {
+}
+```
+
+**Sample Output**
+
+```text
+========== TEST INFO ==========
+Test Name : verifyValidLogin
+Author    : Sheetal
+Module    : Login
+Jira ID   : QA-1001
+Priority  : HIGH
+================================
+
+Executing Login Test
+```
+
+---
+
+
 ## Custom annotations can drive:
 
 - Execution behavior
