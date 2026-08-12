@@ -34,7 +34,7 @@ public @interface TestInfo {
 default.author=FrameworkOwner
 default.module=General
 default.jiraId=NOT-ASSIGNED
-default.priority=MEDIUM,REGRESSION
+default.priority=MEDIUM,LOW
 ```
 
 # Step 4: Create Validation Exception
@@ -43,9 +43,9 @@ package framework.exceptions;
 
 public class InvalidPriorityException extends RuntimeException {
 
-    public InvalidPriorityException(String message) {
-        super(message);
-    }
+	public InvalidPriorityException(String message) {
+		super(message);
+	}
 }
 ```
 
@@ -53,38 +53,28 @@ public class InvalidPriorityException extends RuntimeException {
 ```java
 public final class PriorityUtils {
 
-    private PriorityUtils() {
-    }
+	private PriorityUtils() {
+	}
 
-public static Priority[] getPrioritiesFromProperty(
-        String value) {
+	public static Priority[] getPrioritiesFromProperty(String value) {
 
-    if (value == null ||
-        value.isBlank()) {
+		if (value == null || value.isBlank()) {
 
-        throw new InvalidPriorityException(
-                "Property default.priority is missing.");
-    }
+			throw new InvalidPriorityException("Property default.priority is missing.");
+		}
 
-    try {
+		try {
 
-        return Arrays.stream(value.split(","))
-                .map(String::trim)
-                .map(String::toUpperCase)
-                .map(Priority::valueOf)
-                .toArray(Priority[]::new);
+			return Arrays.stream(value.split(",")).map(String::trim).map(String::toUpperCase).map(Priority::valueOf)
+					.toArray(Priority[]::new);
 
-    } catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 
-        throw new InvalidPriorityException(
-                "Invalid Priority configured in property file : "
-                        + value);
-    }
-}
-
+			throw new InvalidPriorityException("Invalid Priority configured in property file : " + value);
+		}
+	}
 }
 ```
-
 
 # Step 5: Priority Validator
 
@@ -98,28 +88,24 @@ import framework.exceptions.InvalidPriorityException;
 
 public final class PriorityValidator {
 
-    private PriorityValidator() {
-    }
+	private PriorityValidator() {
+	}
 
-    public static void validate(
-            Priority[] priorities) {
+	public static void validate(Priority[] priorities) {
 
-        if (priorities == null ||
-            priorities.length == 0) {
+		if (priorities == null || priorities.length == 0) {
 
-            throw new InvalidPriorityException(
-                    "At least one Priority must be specified.");
-        }
+			throw new InvalidPriorityException("At least one Priority must be specified.");
+		}
 
-        for (Priority priority : priorities) {
+		for (Priority priority : priorities) {
 
-            if (priority == null) {
+			if (priority == null) {
 
-                throw new InvalidPriorityException(
-                        "Null Priority detected.");
-            }
-        }
-    }
+				throw new InvalidPriorityException("Null Priority detected.");
+			}
+		}
+	}
 }
 ```
 
@@ -138,38 +124,25 @@ import framework.exceptions.InvalidPriorityException;
 import framework.metadata.TestMetadata;
 import framework.metadata.TestMetadataResolver;
 
-public class AnnotationValidationListener
-        implements ITestListener {
+public class AnnotationValidationListener implements ITestListener {
 
-    @Override
-    public void onTestStart(
-            ITestResult result) {
+	@Override
+	public void onTestStart(ITestResult result) {
 
-        Method method =
-                result.getMethod()
-                        .getConstructorOrMethod()
-                        .getMethod();
+		Method method = result.getMethod().getConstructorOrMethod().getMethod();
 
-        try {
+		try {
 
-            TestMetadata metadata =
-                    TestMetadataResolver
-                            .resolve(method);
+			TestMetadata metadata = TestMetadataResolver.resolve(method);
 
-            result.setAttribute(
-                    "TEST_METADATA",
-                    metadata);
+			result.setAttribute("TEST_METADATA", metadata);
 
-        } catch (InvalidPriorityException e) {
+		} catch (InvalidPriorityException e) {
 
-            throw new SkipException(
-                    "\nTest Execution Blocked\n"
-                            + "Method : "
-                            + method.getName()
-                            + "\nReason : "
-                            + e.getMessage());
-        }
-    }
+			throw new SkipException(
+					"\nTest Execution Blocked\n" + "Method : " + method.getName() + "\nReason : " + e.getMessage());
+		}
+	}
 }
 ```
 
@@ -178,30 +151,18 @@ public class AnnotationValidationListener
 Valid ✅
 
 ```java
-@TestInfo(
-        author = "Sheetal",
-        module = "Claims",
-        jiraId = "QA-101",
-	priority = {Priority.MEDIUM, Priority.LOW}
-)
-public void verifyClaimCreation() {
+	@TestInfo(author = "Sheetal", module = "Claims", jiraId = "QA-101", priority = { Priority.MEDIUM, Priority.LOW })
+	public void verifyClaimCreation() {
 
-}
+	}
 ```
 Invalid ❌
 
 ```java
-@TestInfo(
-        author = "Sheetal",
-        module = "Claims",
-        jiraId = "QA-101",
-        priority = {
-                Priority.HIGH,
-                Priority.URGENT
-        })
-public void verifyClaimCreation() {
+	@TestInfo(author = "Sheetal", module = "Claims", jiraId = "QA-101", priority = { Priority.HIGH, Priority.URGENT })
+	public void verifyClaimCreation() {
 
-}
+	}
 ```
 Output:  **Compilation failure**
 - This will fail during compilation.   
@@ -215,76 +176,47 @@ Output:  **Compilation failure**
 
 # Step 7: Validate During Metadata Resolution
 ```java
-public static TestMetadata resolve(
-        Method method) {
+	public static TestMetadata resolve(Method method) {
 
-    TestMetadata metadata =
-            new TestMetadata();
+		TestMetadata metadata = new TestMetadata();
 
-    Priority[] priorities;
+		Priority[] priorities;
 
-    if (method.isAnnotationPresent(
-            TestInfo.class)) {
+		if (method.isAnnotationPresent(TestInfo.class)) {
 
-        TestInfo info =
-                method.getAnnotation(
-                        TestInfo.class);
+			TestInfo info = method.getAnnotation(TestInfo.class);
 
-        priorities = info.priority();
+			priorities = info.priority();
 
-    } else {
+		} else {
 
-        priorities =
-                PriorityUtils
-                        .getPrioritiesFromProperty(
-                                propertyLoader.get(
-                                        "default.priority"));
-    }
+			priorities = PriorityUtils.getPrioritiesFromProperty(propertyLoader.get("default.priority"));
+		}
 
-    PriorityValidator.validate(
-            priorities);
+		PriorityValidator.validate(priorities);
 
-    metadata.setPriorities(
-            Arrays.asList(priorities));
+		metadata.setPriorities(Arrays.asList(priorities));
 
-    return metadata;
-}
+		return metadata;
+	}
 ```
 
 # Step 8: Stop Execution in Listener
 
 **Option A (Preferred)**: Skip Test Execution
 ```java
-@Override
-public void onTestStart(
-        ITestResult result) {
+	@Override
+	public void onTestStart(ITestResult result) {
 
-    Method method =
-            result.getMethod()
-                  .getConstructorOrMethod()
-                  .getMethod();
+		Method method = result.getMethod().getConstructorOrMethod().getMethod();
 
-    try {
-
-        TestMetadata metadata =
-                TestMetadataResolver
-                        .resolve(method);
-
-        result.setAttribute(
-                "TEST_METADATA",
-                metadata);
-
-    }
-    catch (InvalidPriorityException ex) {
-
-        throw new SkipException(
-                "Test Execution Blocked"
-                + "\nMethod : "
-                + method.getName()
-                + "\nReason : "
-                + ex.getMessage());
-    }
-}
+		try {
+			TestMetadata metadata = TestMetadataResolver.resolve(method);
+			result.setAttribute("TEST_METADATA", metadata);
+		} catch (InvalidPriorityException ex) {
+			throw new SkipException("Test Execution Blocked" + "\nMethod : " + method.getName() + "\nReason : " + ex.getMessage());
+		}
+	}
 ```
 
 Output:
@@ -298,18 +230,13 @@ Invalid Priority : URGENT
 
 **Option B: Hard Fail Test**
 ```java
-@Override
-public void onTestStart(
-        ITestResult result) {
+	@Override
+	public void onTestStart(ITestResult result) {
 
-    Method method =
-            result.getMethod()
-                    .getConstructorOrMethod()
-                    .getMethod();
+		Method method = result.getMethod().getConstructorOrMethod().getMethod();
 
-    TestMetadataResolver
-            .resolve(method);
-}
+		TestMetadataResolver.resolve(method);
+	}
 ```
 Output:
 ```text
