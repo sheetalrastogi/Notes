@@ -254,6 +254,7 @@ public static TestMetadata resolve(
 # Step 8: Stop Execution in Listener
 
 **Option A (Preferred)**: Skip Test Execution
+```java
 @Override
 public void onTestStart(
         ITestResult result) {
@@ -284,18 +285,19 @@ public void onTestStart(
                 + ex.getMessage());
     }
 }
-
+```
 
 Output:
-
+```text
 SKIPPED
 
 Reason:
 Invalid Priority : URGENT
-
+```
 
 
 **Option B: Hard Fail Test**
+```java
 @Override
 public void onTestStart(
         ITestResult result) {
@@ -308,15 +310,13 @@ public void onTestStart(
     TestMetadataResolver
             .resolve(method);
 }
-
+```
 Output:
-
+```text
 FAILED
 
 Invalid Priority : URGENT
-
-
-
+```
 
 # Improved Validation Responsibility Matrix
 
