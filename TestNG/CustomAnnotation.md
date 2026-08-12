@@ -1,3 +1,16 @@
+## Custom annotations can drive:
+
+- Execution behavior
+- Browser selection
+- Retry policies
+- Reporting
+- Traceability
+- Defect management
+- Governance compliance
+- AI-agent invocation
+- Test evidence collection
+- Risk-based regression
+
 ## Selenium + TestNG Custom Annotations Classification Matrix
 
 | # | Custom Annotation | Objective | Purpose |
