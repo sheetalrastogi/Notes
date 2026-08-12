@@ -24,7 +24,7 @@ Create a custom annotation such that if @Test method is not annotated with "Cust
                   TestMetadata Object
                           │
                           ▼
-             Retry / Reporting / Logging
+             Custom logic configuration for Retry / Reporting / Logging etc
                           │
                           ▼
                    Test Execution
