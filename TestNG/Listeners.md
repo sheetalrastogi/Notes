@@ -236,7 +236,6 @@ A good enterprise approach is to combine **root-cause extraction** + **failure c
 
 
 ```java
-
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
@@ -317,12 +316,23 @@ public class RetryAnalyzer implements IRetryAnalyzer {
 			return "Stale Element";
 		} else if (root instanceof NoSuchElementException) {
 			return "Element Not Found";
+		} else if (root instanceof ElementClickInterceptedException) {
+			return "Click Interception";
+		} else if (root instanceof ElementNotInteractableException) {
+			return "Element Not Interactable";
+		} else if (root instanceof InvalidSelectorException) {
+			return "Locator Defect";
+		} else if (root instanceof UnhandledAlertException) {
+			return "Unexpected Alert";
+		} else if (root instanceof SessionNotCreatedException) {
+			return "Browser Startup Failure";
+		} else if (root instanceof WebDriverException) {
+			return "WebDriver Failure";
 		} else {
 			return "Framework/Application Failure";
 		}
 	}
 }
-
 ```
 
 **Sample Output**
