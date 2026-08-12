@@ -214,7 +214,7 @@ Output:  **Compilation failure**
 
 
 # Step 7: Validate During Metadata Resolution
-
+```java
 public static TestMetadata resolve(
         Method method) {
 
