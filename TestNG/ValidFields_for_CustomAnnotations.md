@@ -94,7 +94,7 @@ public @interface FrameworkConfig {
 
 			executionGroup = 'P',
 
-			owner = "Sheetal",
+			owner = "xxx",
 
 			priority = Priority.HIGH,
 
@@ -126,7 +126,7 @@ public @interface FrameworkConfig {
 
 Output
 ```text
-Owner       : Sheetal
+Owner       : xxx
 Priority    : HIGH
 Retry Count : 3
 
