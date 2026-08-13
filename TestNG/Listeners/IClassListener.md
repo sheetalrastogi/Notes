@@ -4,7 +4,7 @@ IClassListener
 IClassListener is invoked before and after execution of every Test Class
 
 Example use cases:
-
+```text
 1. Test Class Execution Logging
 	Track start and end of every test class.
 		Before Class : LoginTest
@@ -23,7 +23,7 @@ Example use cases:
 	  Create DB Connection
 	After LoginTest
 	  cleanup
-
+```
 
 Example Implementation
 -------------------------
