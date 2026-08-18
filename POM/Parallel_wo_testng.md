@@ -235,3 +235,13 @@ public class ParallelRunner {
 ## Common mistakes
 
 - avoid static  WebDriver, Page Objects, TestData Objects etc.
+
+
+## A robust enterprise implementation typically combines:
+
+ExecutorService 
++ Runnable
++ ThreadLocal<WebDriver>
++ Immutable POJO TestData
++ Workflow Layer
++ Page Component Object Model
