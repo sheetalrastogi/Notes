@@ -1,4 +1,4 @@
-**CIDR** stands for Classless Inter-Domain Routing.
+**CIDR** stands for **Classless Inter-Domain Routing**.
 In your Masscan examples, CIDR specifies the network range (IP address block) that you are authorised to scan.
 
 **CIDR Format**
