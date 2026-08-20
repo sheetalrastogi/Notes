@@ -9,6 +9,28 @@ Selenium itself cannot read Wireshark packets. A practical automation approach i
 
 For automation, **TShark (Wireshark command-line component)** is better to integrate than the Wireshark GUI.
 
+# Wireshark security testing scenarios
+---
+
+1. Clear Text Credential Exposure
+2. Sensitive Data Leakage
+3. TLS/SSL Validation
+4. Weak Protocol Identification
+5. Session Hijacking Testing
+6. API Security Validation
+7. DNS Security Assessment
+8. ARP Spoofing Detection
+9. Port Scanning Detection
+10. Unauthorized Internal Traffic
+11. Malware C2 Communication
+12. Data Exfiltration Detection
+13. Cloud Security Validation
+14. Certificate Validation
+15. DDoS Analysis
+16. Kubernetes Security Validation
+17. Database Traffic Security
+18. Authentication & Login Security Testing
+
 # Automation workflow
 
 ```text
