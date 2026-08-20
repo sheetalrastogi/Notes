@@ -47,71 +47,48 @@ public class ClearTextCredentialExposureTest {
 	public void verifyCredentialsNotExposed() throws Exception {
 
 		String pcapFile = "capture.pcapng";
-
 		// ---------------------------------------------------
 		// Start TShark Capture
 		// ---------------------------------------------------
 		Process captureProcess = new ProcessBuilder("tshark", "-i", "Wi-Fi", "-w", pcapFile).start();
-
 		Thread.sleep(5000);
-
 		// ---------------------------------------------------
 		// Selenium Login
 		// ---------------------------------------------------
 		WebDriver driver = new ChromeDriver();
-
 		String username = "testuser";
 		String password = "Password123";
-
 		try {
-
 			driver.get("https://myapplication.com/login");
-
 			driver.findElement(By.id("username")).sendKeys(username);
-
 			driver.findElement(By.id("password")).sendKeys(password);
-
 			driver.findElement(By.id("loginBtn")).click();
-
 			Thread.sleep(5000);
-
 		} finally {
 			driver.quit();
 		}
-
 		// ---------------------------------------------------
 		// Stop Capture
 		// ---------------------------------------------------
 		captureProcess.destroy();
-
 		Thread.sleep(3000);
-
 		// ---------------------------------------------------
 		// Search Capture For Clear Text Data
 		// ---------------------------------------------------
 		boolean credentialFound = containsSensitiveData(pcapFile, username, password);
-
 		Assert.assertFalse(credentialFound, "SECURITY FAILURE : Credentials exposed in network traffic");
 	}
 
 	private boolean containsSensitiveData(String pcap, String username, String password) throws Exception {
-
 		Process process = new ProcessBuilder("tshark", "-r", pcap, "-Y", "http || ftp || telnet", "-V").start();
-
 		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
 		String line;
-
 		while ((line = reader.readLine()) != null) {
-
 			if (line.contains(username) || line.contains(password)) {
-
 				System.out.println("Potential Clear Text Exposure: " + line);
-
 				return true;
 			}
 		}
-
 		return false;
 	}
 }
