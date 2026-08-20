@@ -18,4 +18,3 @@ Reduced manual security testing effort by 40% while increasing security coverage
   - Automated testing for **IAM permissions**, **network security configurations**, **container security posture**, and **infrastructure misconfigurations** 
   - Establish **Secure coding standards**, implement **Security-by-Design principles** by integrating SAST, DAST, dependency scanning, and secrets scanning via Automation scripts.
   - Validate **Data segregation controls**, **access restrictions** between zones, **encryption enforcement**, **PII exposure** prevention across layers.
-  - Perform cloud security assessments, IAM privilege reviews, container security testing, serverless security validation, network exposure analysis, and misconfiguration discovery.
