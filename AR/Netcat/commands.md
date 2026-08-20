@@ -41,5 +41,6 @@ nc 192.168.1.10 21
 # Security Testing Examples (Authorised Environments)
 As a Test Architect, you may use Netcat for validation:
 
-ScenarioCommandValidate exposed SSH servicenc -vz 10.0.0.10 22Verify Kubernetes API accessibilitync -vz 10.0.0.50 6443Check exposed database portnc -vz 10.0.0.30 3306Verify Redis exposurenc -vz 10.0.0.40 6379Test message broker portnc -vz 10.0.0.60 5672
+<img width="251" height="91" alt="image" src="https://github.com/user-attachments/assets/2e5b1987-f0ed-43d9-9c52-8ad28098bdf4" />
+
 
