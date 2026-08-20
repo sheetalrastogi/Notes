@@ -1,7 +1,8 @@
-# 2. Security Automation
+# Security Automation
+
 Reduced manual security testing effort by 40% while increasing security coverage across all sprint releases.
 
-Value Added
+**Value Added**
 - Improved security assessments / Penetration tests coverage by
   - Automating Penetration / Offensive test as part of secure development
   - Test pipeline resilience against malicious inputs.
