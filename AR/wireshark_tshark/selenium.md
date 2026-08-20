@@ -31,6 +31,65 @@ For automation, **TShark (Wireshark command-line component)** is better to integ
 17. Database Traffic Security
 18. Authentication & Login Security Testing
 
+
+# what to look for for TShark captures
+| Test Area | Can TShark Test? | Notes |
+|------------|------------|------------|
+| HTTP Basic Authentication | Yes | Authorization header visible |
+| FTP credentials | Yes | USER/PASS commands visible |
+| Telnet sessions | Yes | Plaintext traffic |
+| API keys in headers | Yes | Visible in HTTP headers |
+| Session tokens in URLs | Yes | Visible in requests |
+| TLS version | Yes | TLS handshake analysis |
+| Cipher suites | Yes | TLS negotiation visible |
+| Certificate exchange | Yes | TLS certificates visible |
+| Weak encryption | Yes | Detected from TLS handshake |
+| Telnet | Yes | Protocol inspection |
+| FTP | Yes | Protocol inspection |
+| POP3 | Yes | Cleartext credential detection |
+| IMAP | Yes | Protocol inspection |
+| SNMP v1/v2 | Yes | Community strings visible |
+| HTTP | Yes | HTTP packet inspection |
+| Session cookies | Yes | Cookie headers visible |
+| JWT tokens | Yes | JWT transmission visible |
+| Authorization headers | Yes | HTTP headers visible |
+| Bearer tokens | Yes | HTTP headers visible |
+| API keys | Yes | Request inspection |
+| JWT transmission | Yes | Token transport visible |
+| Sensitive payloads | Yes | Payload inspection |
+| DNS tunneling | Yes | DNS traffic analysis |
+| Malicious domains | Yes | DNS queries visible |
+| Clear text DNS | Yes | DNS packet analysis |
+| Duplicate ARP responses | Yes | ARP analysis |
+| MAC address changes | Yes | Layer-2 analysis |
+| Multiple connection attempts | Yes | TCP session analysis |
+| Sequential port access | Yes | Port scanning behavior |
+| Application-to-database traffic | Yes | Network flow analysis |
+| User access to server networks | Yes | Traffic flow analysis |
+| Unexpected east-west traffic | Yes | Traffic monitoring |
+| Beaconing patterns | Yes | Traffic timing analysis |
+| Unknown external IPs | Yes | Connection analysis |
+| Repeated DNS requests | Yes | DNS inspection |
+| Large outbound transfers | Yes | Traffic volume analysis |
+| Suspicious uploads | Yes | HTTP/FTP payload analysis |
+| Metadata requests | Yes | Cloud metadata traffic detection |
+| Expired certificates | Yes | Certificate inspection |
+| Self-signed certificates | Yes | Certificate inspection |
+| Incorrect CN/SAN entries | Yes | Certificate validation |
+| SYN floods | Yes | TCP analysis |
+| UDP floods | Yes | Traffic analysis |
+| ICMP floods | Yes | Packet analysis |
+| Exposed kube-api traffic | Yes | API traffic detection |
+| Unencrypted service communication | Yes | Protocol analysis |
+| Unauthorized pod communication | Partially | Traffic visible, authorization not |
+| SQL queries transmitted in plain text | Yes | Database protocol inspection |
+| Weak database authentication | Partially | Visible if transmitted over network |
+| Unencrypted connections | Yes | Protocol inspection |
+| Password transmission | Yes | Cleartext detection |
+| MFA verification traffic | Partially | Traffic visible |
+| Token issuance flow | Yes | API traffic inspection |
+| Cloud API calls | Yes | API request inspection |
+
 # Automation workflow
 
 ```text
