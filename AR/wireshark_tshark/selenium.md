@@ -94,4 +94,21 @@ public class ClearTextCredentialExposureTest {
 }
 ```
 
+**Additional Security Test Assertions**
+
+- Assert.assertFalse(packet.contains("Authorization: Basic"));
+- Assert.assertFalse(packet.contains("password="));
+- Assert.assertFalse(packet.contains("Bearer "));
+- Assert.assertFalse(packet.contains("apiKey"));
+- Assert.assertFalse(packet.contains("secret"));
+- Assert.assertFalse(packet.contains("Set-Cookie"));
+
+**Useful TShark Commands**
+
+- Capture Traffic		tshark -i Wi-Fi -w capture.pcapng
+- Read HTTP Requests	tshark -r capture.pcapng -Y "http"
+- Find FTP Credentials	tshark -r capture.pcapng -Y ftp
+- Find Telnet Traffic	tshark -r capture.pcapng -Y telnet
+- Extract HTTP POST Data	tshark -r capture.pcapng -Y "http.request.method==POST" -V
+
 
