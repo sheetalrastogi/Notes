@@ -40,3 +40,30 @@ Assumptions: All testing is authorised, scoped, and conducted against owned asse
 | Red Team Validation | Forgotten Environment Discovery | Detect legacy or abandoned environments | Unmanaged compromise risk | `masscan <AUTHORIZED_CIDR> -p1-10000 --rate 1000 -oX forgotten-assets.xml` | No undocumented systems discovered | Fail if unknown assets found | High | Environment lifecycle management |
 | Red Team Validation | Multi-Tenant Boundary Validation | Verify tenant network isolation | Cross-tenant reconnaissance risk | `masscan <TENANT_TEST_CIDR> -p22,80,443,445 --rate 500 -oL tenancy.txt` | No visibility into other tenant services | Fail if tenant boundary breached | Critical | Segmentation, VPC isolation, network policies |
 | Red Team Validation | Critical Infrastructure Exposure Review | Identify exposed infrastructure services | High-value target discovery | `masscan <AUTHORIZED_CIDR> -p53,123,161,389,636,6443 --rate 500 -oL infra-services.txt` | Exposure limited to approved networks | Fail if externally discoverable | Critical | Restrict infrastructure service access |
+
+
+
+**Recommended Evidence Artifacts**
+For audit, QE security validation following needs to be captured:
+- Masscan output (-oL, -oX, -oJ)
+- Approved port baseline documentation
+- Firewall/Security Group/NSG rule exports
+- Kubernetes NetworkPolicy manifests
+- Cloud route table and private endpoint evidence
+- SIEM alert screenshots and incident IDs
+- Change tickets and approved exceptions
+- IaC configuration diffs
+- Service ownership mapping
+- Risk acceptance records (where applicable)
+
+**High-Risk Ports Worth Including in Baseline Reviews**
+| Category                | Ports                                      |
+|-------------------------|--------------------------------------------|
+| Administration          | 22, 3389, 5900, 5985, 5986                 |
+| Windows Infrastructure  | 135, 139, 445                              |
+| Databases               | 1433, 1521, 27017, 3306, 5432, 6379        |
+| Kubernetes              | 2379, 2380, 6443, 10250, 10255             |
+| Containers              | 2375, 2376                                 |
+| Directory Services      | 88, 389, 636, 3268, 3269                   |
+| Web/API                 | 80, 443, 8080, 8443, 9443                  |
+| Messaging / Search      | 5672, 9092, 9200, 9300                     |
