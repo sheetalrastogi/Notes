@@ -114,3 +114,20 @@ public void gridHealthCheck() {
     Assert.assertTrue(capacity.getAvailableSlots() > 0, "No Grid Capacity Available");
 }
 ```
+
+## # Additional Selenium Grid Metrics Worth Tracking
+
+- Grid Up Time
+- Registered Nodes
+- Node Health
+- Total Slots
+- Used Slots
+- Available Slots
+- Browser-wise Capacity
+- Session Queue Size
+- Pending Requests
+- Average Session Duration
+- Failed Session Count
+- Grid Utilization %
+- Node CPU %
+- Node Memory %
