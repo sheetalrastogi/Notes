@@ -1,6 +1,12 @@
 # Security Automation
 
-Reduced manual security testing effort by 40% while increasing security coverage across all sprint releases.
+# 1. Reduced manual security testing effort by 40% while increasing security coverage across all sprint releases.
+ - Automate repetitive SOC tasks (e.g., phishing triage, enrichment, response).
+ - Collaborate with SOC analysts and threat intelligence teams to fine-tune detections and workflows
+
+# 2. Perform threat hunting and advanced queries using Kusto Query Language (KQL).
+  - Experience developing and managing SOAR playbooks.
+  - Familiarity with SIEM/SOAR integrations (e.g., ServiceNow, Defender, EDR tools, M365).
 
 **Value Added**
 - Improved security assessments / Penetration tests coverage by
