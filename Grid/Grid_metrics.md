@@ -112,6 +112,15 @@ public void gridHealthCheck() {
     ExtentReportManager.logInfo("Grid Utilization : " + capacity.getUtilization() + "%");
 
     Assert.assertTrue(capacity.getAvailableSlots() > 0, "No Grid Capacity Available");
+
+	// other checks:
+	ExtentReportManager.logInfo("Registered Nodes : " + grid.getRegisteredNodes());
+	ExtentReportManager.logInfo("Total Slots : " + grid.getTotalSlots());
+	ExtentReportManager.logInfo("Used Slots : " + grid.getUsedSlots());
+	ExtentReportManager.logInfo("Available Slots : " + grid.getAvailableSlots());
+	ExtentReportManager.logInfo("Utilization : " + grid.getUtilization() + "%");
+	}
+
 }
 ```
 
