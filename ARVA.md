@@ -8,6 +8,14 @@
   - Experience developing and managing SOAR playbooks.
   - Familiarity with SIEM/SOAR integrations (e.g., ServiceNow, Defender, EDR tools, M365).
 
+# 3. Prioritize vulnerabilities based on:
+     - CVSS Score
+     - Asset Criticality
+     - Exposure Level
+     - Business Risk
+     - Known Exploitation Trends
+
+
 **Value Added**
 - Improved security assessments / Penetration tests coverage by
   - Automating Penetration / Offensive test as part of secure development
